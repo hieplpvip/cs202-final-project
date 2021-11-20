@@ -6,6 +6,8 @@
 #include "olcPGEX_Sound.h"
 // clang-format on
 
+#include "Player.h"
+
 class Game : public olc::PixelGameEngine {
 public:
   Game();
@@ -32,6 +34,8 @@ private:
   int selectedMenuItem;
   int currentLevel;
   int coinEaten;
+
+  Player* player;
 };
 
 #endif

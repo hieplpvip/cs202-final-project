@@ -1,6 +1,12 @@
 #include "Game.h"
 #include "Constants.h"
 
+#define delete_ptr(ptr) \
+  if (ptr != nullptr) { \
+    delete ptr;         \
+    ptr = nullptr;      \
+  }
+
 Game::Game() {
   sAppName = "Crossing Road";
 }
@@ -13,6 +19,8 @@ bool Game::OnUserCreate() {
   selectedMenuItem = 0;
   currentLevel = 1;
   coinEaten = 0;
+
+  player = new Player();
 
   return true;
 }
@@ -92,6 +100,21 @@ bool Game::OnUserUpdate(float fElapsedTime) {
 
       DrawString(0, 0, "Level: " + std::to_string(currentLevel), olc::RED);
 
+      if (GetKey(olc::UP).bHeld) {
+        player->moveUp(fElapsedTime);
+      }
+      if (GetKey(olc::DOWN).bHeld) {
+        player->moveDown(fElapsedTime);
+      }
+      if (GetKey(olc::LEFT).bHeld) {
+        player->moveLeft(fElapsedTime);
+      }
+      if (GetKey(olc::RIGHT).bHeld) {
+        player->moveRight(fElapsedTime);
+      }
+
+      player->draw(this);
+
       break;
     }
     case GAME_STATE_WIN: {
@@ -129,6 +152,8 @@ bool Game::OnUserUpdate(float fElapsedTime) {
 
 bool Game::OnUserDestroy() {
   olc::SOUND::DestroyAudio();
+
+  delete_ptr(player);
 
   return true;
 }
