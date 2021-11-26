@@ -13,8 +13,13 @@ public:
   void setDirection(DIRECTION direction);
   void move(float fElapsedTime);
   void draw(olc::PixelGameEngine* pge);
+  ~Obstacle() {
+	  if (sprite)
+		  delete sprite;
+  }
 
 protected:
+  olc::Sprite* sprite = nullptr;
   DIRECTION direction;
 };
 

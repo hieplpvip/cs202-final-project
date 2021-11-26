@@ -4,6 +4,7 @@
 #include "Obstacle.h"
 
 class Truck : public Obstacle {
+	void draw(olc::PixelGameEngine* pge);
 };
 
 #endif

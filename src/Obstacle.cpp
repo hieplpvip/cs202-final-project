@@ -9,5 +9,6 @@ void Obstacle::move(float fElapsedTime) {
 }
 
 void Obstacle::draw(olc::PixelGameEngine* pge) {
-  // TODO
+	if (sprite)
+		pge->DrawSprite(pos, sprite);
 }
