@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "Constants.h"
+#include "Logging.h"
 
 #define delete_ptr(ptr) \
   if (ptr != nullptr) { \
@@ -12,6 +13,8 @@ Game::Game() {
 }
 
 bool Game::OnUserCreate() {
+  Logging::debug("[Game::OnUserCreate] Initializing game engine\n");
+
   olc::SOUND::InitialiseAudio();
 
   gameState = GAME_STATE_TITLE;
@@ -47,6 +50,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       if (GetKey(olc::ENTER).bPressed) {
         if (selectedMenuItem == 0) {
           // New Game
+          Logging::info("New game!\n");
           newGame();
           return true;
         } else if (selectedMenuItem == 1) {
@@ -59,6 +63,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
           timeAccumulator = 0;
         } else {
           // Exit
+          Logging::info("Exit!\n");
           return false;
         }
       } else if (GetKey(olc::DOWN).bPressed) {
@@ -151,6 +156,8 @@ bool Game::OnUserUpdate(float fElapsedTime) {
 }
 
 bool Game::OnUserDestroy() {
+  Logging::debug("[Game::OnUserDestroy] Destroying objects\n");
+
   olc::SOUND::DestroyAudio();
 
   delete_ptr(player);
