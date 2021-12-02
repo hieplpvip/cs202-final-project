@@ -7,8 +7,12 @@
 #include "Random.h"
 #include "olcPixelGameEngine.h"
 
+extern olc::PixelGameEngine* pge;
+
 class Level {
 public:
+	Level(float timeBetweenObstacles, float obstacleSpeed, int numberOfLanes, Player* player, int seed);
+	~Level();
   void setSeed(long long seed);
   void update(float fElapsedTime);
   void draw(olc::PixelGameEngine* pge);
@@ -19,8 +23,14 @@ public:
   bool isComplete(Player* player);
 
 private:
-  Random rnd;
-  std::vector<Lane*> lanes;
+	float timeBetweenObstacles;
+	float obstacleSpeed;
+	int numberOfLanes;
+	int topLanePos;
+	int bottomLanePos;
+	
+	Random rnd;
+	std::vector<Lane*> lanes;
 };
 
 #endif
