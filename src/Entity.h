@@ -2,7 +2,6 @@
 #define ENTITY_H
 
 #include "olcPixelGameEngine.h"
-extern olc::PixelGameEngine* pge;
 
 class Entity {
 public:
