@@ -10,7 +10,7 @@
 
 class Lane {
 public:
-	Lane(olc::vf2d pos, int direction, float timeBetweenObstacles, float obstacleSpeed, int seed);
+	Lane(olc::vd2d pos, int direction, float timeBetweenObstacles, float obstacleSpeed, int seed);
 	~Lane();
   void setSeed(long long seed);
   void update(float fElapsedTime);
