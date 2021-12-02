@@ -10,14 +10,24 @@
 
 class Lane {
 public:
+	Lane(olc::vd2d pos, int direction, float timeBetweenObstacles, float obstacleSpeed, int seed);
+	~Lane();
   void setSeed(long long seed);
   void update(float fElapsedTime);
   void draw(olc::PixelGameEngine* pge);
+
+  Obstacle* genereateObstacle();
 
   bool checkCollision(Player* player);
   void checkCoin(Player* player, int& coinEaten);
 
 private:
+	olc::vf2d pos;
+	int direction;
+	float timeBetweenObsstacles;
+	float obstacleSpeed;
+	float timeAccumulator;
+
   Random rnd;
   std::vector<Obstacle*> obstacles;
   std::vector<Coin*> coins;
