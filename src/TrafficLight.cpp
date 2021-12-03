@@ -41,21 +41,21 @@ void TrafficLight::draw(olc::PixelGameEngine* pge) {
 	if (currentColor == GREEN) 
 	{
 		// draw green light
-		sprite = new olc::Sprite("assets/graphics/green.jpg");
+		sprite = new olc::Sprite("assets/graphics/light_green.jpg");
 		if (sprite)
 			pge->DrawSprite(pos, sprite);
 	}
 	else if (currentColor == YELLOW) 
 	{
 		// draw yellow light
-		sprite = new olc::Sprite("assets/graphics/yellow.jpg");
+		sprite = new olc::Sprite("assets/graphics/light_yellow.jpg");
 		if (sprite)
 			pge->DrawSprite(pos, sprite);
 	}
 	else 
 	{
 		// draw red light
-		sprite = new olc::Sprite("assets/graphics/red.jpg");
+		sprite = new olc::Sprite("assets/graphics/light_red.jpg");
 		if (sprite)
 			pge->DrawSprite(pos, sprite);
 	}
