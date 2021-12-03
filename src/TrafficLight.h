@@ -13,6 +13,7 @@ class TrafficLight : public Entity {
 public:
   TrafficLight();
 
+  void reset();
   void update(float fElapsedTime);
   void draw(olc::PixelGameEngine* pge);
 
