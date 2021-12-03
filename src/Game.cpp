@@ -1,6 +1,9 @@
 #include "Game.h"
+#include <cassert>
 #include "Constants.h"
 #include "Logging.h"
+
+olc::PixelGameEngine* pge = nullptr;
 
 #define delete_ptr(ptr) \
   if (ptr != nullptr) { \
@@ -9,6 +12,7 @@
   }
 
 Game::Game() {
+    pge = this;
   sAppName = "Crossing Road";
 }
 
@@ -24,6 +28,8 @@ bool Game::OnUserCreate() {
   coinEaten = 0;
 
   player = new Player();
+  trafficLight = new TrafficLight();
+  level = nullptr;
 
   return true;
 }
@@ -41,7 +47,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
 
       if (timeAccumulator > Constants::TITLE_DURATION || GetMouse(0).bPressed || GetKey(olc::SPACE).bPressed) {
         gameState = GAME_STATE_MENU;
-        timeAccumulator = 0;
+        //timeAccumulator = 0;
       }
 
       break;
@@ -103,18 +109,24 @@ bool Game::OnUserUpdate(float fElapsedTime) {
         return true;
       }
 
-      DrawString(0, 0, "Level: " + std::to_string(currentLevel), olc::RED);
+      DrawString(10, 10, "Level: " + std::to_string(currentLevel), olc::RED);
+      DrawString(10, 20, "Score: " + std::to_string(coinEaten * 10), olc::RED);
 
-      if (GetKey(olc::UP).bHeld) {
+      int dx = 0, dy = 0;
+      if (GetKey(olc::LEFT).bHeld) --dx;
+      if (GetKey(olc::RIGHT).bHeld) ++dx;
+      if (GetKey(olc::UP).bHeld) --dy;
+      if (GetKey(olc::DOWN).bHeld) ++dy;
+      if (dy==-1) {
         player->moveUp(fElapsedTime);
       }
-      if (GetKey(olc::DOWN).bHeld) {
+      if (dy==1) {
         player->moveDown(fElapsedTime);
       }
-      if (GetKey(olc::LEFT).bHeld) {
+      if (dx==-1) {
         player->moveLeft(fElapsedTime);
       }
-      if (GetKey(olc::RIGHT).bHeld) {
+      if (dx==1) {
         player->moveRight(fElapsedTime);
       }
 

@@ -16,7 +16,7 @@ public:
   void update(float fElapsedTime);
   void draw(olc::PixelGameEngine* pge);
 
-  Obstacle* genereateObstacle();
+  Obstacle* generateObstacle();
 
   bool checkCollision(Player* player);
   void checkCoin(Player* player, int& coinEaten);
@@ -24,13 +24,14 @@ public:
 private:
 	olc::vf2d pos;
 	int direction;
-	float timeBetweenObsstacles;
+	float timeBetweenObstacles;
 	float obstacleSpeed;
 	float timeAccumulator;
 
   Random rnd;
   std::vector<Obstacle*> obstacles;
-  std::vector<Coin*> coins;
+  //std::vector<Coin*> coins;
+  Coin* coin;
 };
 
 #endif

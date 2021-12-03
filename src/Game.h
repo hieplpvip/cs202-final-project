@@ -7,6 +7,9 @@
 // clang-format on
 
 #include "Player.h"
+#include "Level.h"
+#include "Player.h"
+#include "TrafficLight.h"
 
 class Game : public olc::PixelGameEngine {
 public:
@@ -17,6 +20,8 @@ public:
   bool OnUserDestroy() override;
 
   void newGame();
+  void nextLevel();
+  void generateLevel();
 
 private:
   enum {
@@ -36,6 +41,8 @@ private:
   int coinEaten;
 
   Player* player;
+  TrafficLight* trafficLight;
+  Level* level;
 };
 
 #endif

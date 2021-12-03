@@ -18,6 +18,7 @@ public:
 	  if (sprite)
 		  delete sprite;
   }
+  void playCollisionSound();
 
 protected:
   olc::Sprite* sprite = nullptr;
