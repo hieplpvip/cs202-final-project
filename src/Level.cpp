@@ -31,11 +31,21 @@ void Level::setSeed(long long seed) {
 
 void Level::update(float fElapsedTime) {
   // TODO
+	for (auto& lane : lanes)
+		lane->update(fElapsedTime);
 	
 }
 
 void Level::draw(olc::PixelGameEngine* pge) {
   // TODO
+	// draw pavements
+	/*sprite = new olc::Sprite("assets/graphics/Pavement.png");
+	if (sprite)
+		pge->DrawSprite(pos, sprite);*/
+
+	// draw lane
+	for (auto& lane : lanes)
+		lane->draw(pge);
 
 }
 
