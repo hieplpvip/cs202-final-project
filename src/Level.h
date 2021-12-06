@@ -30,6 +30,7 @@ private:
 	int bottomLanePos;
 	
 	Random rnd;
+	Player* player;
 	std::vector<Lane*> lanes;
 };
 

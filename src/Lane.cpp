@@ -77,13 +77,17 @@ void Lane::update(float fElapsedTime) {
 void Lane::draw(olc::PixelGameEngine* pge) {
   // TODO
   // draw the road
-
   
   // draw obstacles
 	for (auto& obstacle : obstacles) obstacle->draw(pge);
 
   // draw coin
 	if (coin != nullptr) coin->draw(pge);
+}
+
+Obstacle* Lane::generateObstacle()
+{
+
 }
 
 bool Lane::checkCollision(Player* player) {
