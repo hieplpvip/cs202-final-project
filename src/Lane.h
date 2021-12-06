@@ -32,6 +32,7 @@ private:
   std::vector<Obstacle*> obstacles;
   //std::vector<Coin*> coins;
   Coin* coin;
+  olc::Sprite* sprite = nullptr;
 };
 
 #endif
