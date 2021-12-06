@@ -57,9 +57,11 @@ bool Level::checkCollision(Player* player) {
 
 void Level::checkCoin(Player* player, int& coinEaten) {
   // TODO
-	
+	for (auto& lane : lanes)
+		lane->checkCoin(player, coinEaten);
 }
 
 bool Level::isComplete(Player* player) {
   // TODO
+	return (int)(player->getPosition().y + player->getSize().y < topLanePos);
 }
