@@ -33,7 +33,6 @@ void Level::update(float fElapsedTime) {
   // TODO
 	for (auto& lane : lanes)
 		lane->update(fElapsedTime);
-	
 }
 
 void Level::draw(olc::PixelGameEngine* pge) {
@@ -51,10 +50,14 @@ void Level::draw(olc::PixelGameEngine* pge) {
 
 bool Level::checkCollision(Player* player) {
   // TODO
+	for (auto& lane : lanes)
+		if (lane->checkCollision(player)) return true;
+	return false;
 }
 
 void Level::checkCoin(Player* player, int& coinEaten) {
   // TODO
+	
 }
 
 bool Level::isComplete(Player* player) {
