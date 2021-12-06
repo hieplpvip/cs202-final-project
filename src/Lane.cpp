@@ -77,6 +77,9 @@ void Lane::update(float fElapsedTime) {
 void Lane::draw(olc::PixelGameEngine* pge) {
   // TODO
   // draw the road
+	/*sprite = new olc::Sprite("assets/graphics/Lane.png");
+	if (sprite)
+		pge->DrawSprite(pos, sprite);*/
   
   // draw obstacles
 	for (auto& obstacle : obstacles) obstacle->draw(pge);
