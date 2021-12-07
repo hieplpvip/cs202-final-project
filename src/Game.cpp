@@ -183,3 +183,8 @@ void Game::newGame() {
   currentLevel = 1;
   coinEaten = 0;
 }
+
+void Game::generateLevel()
+{
+
+}
