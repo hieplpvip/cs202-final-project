@@ -186,5 +186,9 @@ void Game::newGame() {
 
 void Game::generateLevel()
 {
-
+    Logging::debug("[game::generateLevel] Generate level %d\n", currentLevel);
+    delete_ptr(level);
+    auto [timeBetweenObstacles, obstacleSpeed, numberOfLanes] = Constants::LEVELS_CONFIG[currentLevel - 1];
+    level = new Level(timeBetweenObstacles, obstacleSpeed, numberOfLanes, player, currentLevel);
+    trafficLight->reset();
 }
