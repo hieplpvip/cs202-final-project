@@ -15,7 +15,7 @@ Level::Level(float timeBetweenObstacles, float obstacleSpeed, int numberOfLanes,
 		lanes.push_back(lane);
 	}
 
-	player->setPosition({ pge->ScreenWidth() / 2.0f, bottomLanePos });
+	player->setPosition({ pge->ScreenWidth() / 2.0f, (float)bottomLanePos });
 }
 
 Level::~Level()
