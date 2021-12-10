@@ -32,6 +32,7 @@ private:
 	Random rnd;
 	Player* player;
 	std::vector<Lane*> lanes;
+	olc::Sprite* sprite = nullptr;
 };
 
 #endif
