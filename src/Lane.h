@@ -7,6 +7,11 @@
 #include "Player.h"
 #include "Random.h"
 #include "olcPixelGameEngine.h"
+#include "Bird.h"
+#include "Car.h"
+#include "Truck.h"
+#include "Elephant.h"
+#include "Logging.h"
 
 class Lane {
 public:
