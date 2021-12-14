@@ -6,30 +6,27 @@ TrafficLight::TrafficLight() {
   currentColor = GREEN;
 }
 
-void TrafficLight::reset()
-{
+void TrafficLight::reset() {
 	Logging::debug("[TrafficLight::reset] Resetting raffic light");
 	timeAccumulator = 0;
 	currentColor = GREEN;
 }
 
 void TrafficLight::update(float fElapsedTime) {
-  // TODO
 	timeAccumulator += fElapsedTime;
-	if (currentColor == GREEN && timeAccumulator >= 7.0f)
-	{
+	if (currentColor == GREEN && timeAccumulator >= 7.0f)	{
 		Logging::debug("[TrafficLight::update] Traffic light turns yellow");
 		currentColor = YELLOW;
 		timeAccumulator = 0;
 	}
-	else if (currentColor == YELLOW && timeAccumulator >= 3.0f)
-	{
+
+	else if (currentColor == YELLOW && timeAccumulator >= 3.0f)	{
 		Logging::debug("[TrafficLight::update] Traffic light turns red");
 		currentColor = RED;
 		timeAccumulator = 0;
 	}
-	else if (currentColor == RED && timeAccumulator >= 3.0f)
-	{
+
+	else if (currentColor == RED && timeAccumulator >= 3.0f)	{
 		Logging::debug("[TrafficLight::update] Traffic light turns green");
 		currentColor = GREEN;
 		timeAccumulator = 0;
@@ -37,25 +34,23 @@ void TrafficLight::update(float fElapsedTime) {
 }
 
 void TrafficLight::draw(olc::PixelGameEngine* pge) {
-  // TODO
-	if (currentColor == GREEN) 
-	{
+	if (currentColor == GREEN) 	{
 		// draw green light
-		sprite = new olc::Sprite("assets/graphics/light_green.jpg");
+		sprite = new olc::Sprite("assets/graphics/light_green.png");
 		if (sprite)
 			pge->DrawSprite(pos, sprite);
 	}
-	else if (currentColor == YELLOW) 
-	{
+
+	else if (currentColor == YELLOW) 	{
 		// draw yellow light
-		sprite = new olc::Sprite("assets/graphics/light_yellow.jpg");
+		sprite = new olc::Sprite("assets/graphics/light_yellow.png");
 		if (sprite)
 			pge->DrawSprite(pos, sprite);
 	}
-	else 
-	{
+
+	else 	{
 		// draw red light
-		sprite = new olc::Sprite("assets/graphics/light_red.jpg");
+		sprite = new olc::Sprite("assets/graphics/light_red.png");
 		if (sprite)
 			pge->DrawSprite(pos, sprite);
 	}
