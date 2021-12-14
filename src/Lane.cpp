@@ -1,6 +1,4 @@
 #include "Lane.h"
-#include "Bird.h"
-#include "Logging.h"
 
 Lane::Lane(olc::vf2d pos, int direction, float timeBetweenObstacles, float obstacleSpeed, int seed)
 {
@@ -90,7 +88,7 @@ void Lane::draw(olc::PixelGameEngine* pge) {
 
 Obstacle* Lane::generateObstacle()
 {
-
+	return new Bird();
 }
 
 bool Lane::checkCollision(Player* player) {
