@@ -6,3 +6,8 @@ void Car::draw(olc::PixelGameEngine* pge) {
 	else sprite == new olc::Sprite("assets/graphics/Car_right.png");
 	Obstacle::draw(pge);
 }
+
+void Car::playCollisionSound() {
+	snd = olc::SOUND::LoadAudioSample("assets/sound/vehicle_collision.wav");
+	Obstacle::playCollisionSound();
+};

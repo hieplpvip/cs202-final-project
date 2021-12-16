@@ -5,6 +5,7 @@
 
 class Car : public Obstacle {
 	void draw(olc::PixelGameEngine* pge);
+	void playCollisionSound();
 };
 
 #endif
