@@ -8,3 +8,8 @@ void Bird::draw(olc::PixelGameEngine* pge) {
 	//sprite = new olc::Sprite("assets/graphics/Bird_fly_left.png");
 	Obstacle::draw(pge);
 }
+
+void Bird::playCollisionSound() {
+	snd = olc::SOUND::LoadAudioSample("assets/sound/animal_collision.wav");
+	Obstacle::playCollisionSound();
+}

@@ -5,6 +5,8 @@
 
 class Elephant : public Obstacle {
 	void draw(olc::PixelGameEngine* pge);
+	void playCollisionSound();
 };
+
 
 #endif
