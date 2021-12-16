@@ -2,6 +2,7 @@
 #define ENTITY_H
 
 #include "olcPixelGameEngine.h"
+#include "olcPGEX_Sound.h"
 extern olc::PixelGameEngine* pge;
 
 class Entity {

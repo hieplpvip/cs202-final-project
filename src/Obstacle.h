@@ -21,6 +21,7 @@ public:
   void playCollisionSound();
 
 protected:
+  int snd;
   olc::Sprite* sprite = nullptr;
   DIRECTION direction;
 };
