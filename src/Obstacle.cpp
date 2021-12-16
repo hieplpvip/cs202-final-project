@@ -11,13 +11,12 @@ void Obstacle::setDirection(DIRECTION direction) {
 }
 
 void Obstacle::move(float fElapsedTime) {
-	switch (direction)
-	{
-	case LEFT:
-		pos.x -= fElapsedTime * speed;
-		break;
+	switch (direction) 	{
 	case RIGHT:
 		pos.x += fElapsedTime * speed;
+		break;
+	case LEFT:
+		pos.x -= fElapsedTime * speed;
 		break;
     }
 }
@@ -28,5 +27,5 @@ void Obstacle::draw(olc::PixelGameEngine* pge) {
 }
 
 void Obstacle::playCollisionSound() {
-
+	olc::SOUND::PlaySample(snd);
 }
