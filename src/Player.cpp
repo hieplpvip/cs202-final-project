@@ -7,6 +7,34 @@ Player::Player() {
   // speed=70;
 }
 
+int Player::getX()
+{
+	return pos.x;
+}
+
+void Player::setX(int x)
+{
+	pos.x = x;
+}
+
+int Player::getY()
+{
+	return pos.y;
+}
+
+void Player::setY(int y)
+{
+	pos.y = y;
+}
+
+
+void Player::init()
+{
+  pos = {0, 0};
+  size = {10, 10};
+  speed = 50;
+}
+
 void Player::moveUp(float fElapsedTime) {
   pos.y -= fElapsedTime * speed;
   //if (pos.y<0) pos.y=0;

@@ -10,6 +10,7 @@
 #include "Level.h"
 #include "Player.h"
 #include "TrafficLight.h"
+#include "string"
 
 class Game : public olc::PixelGameEngine {
 public:
@@ -22,6 +23,9 @@ public:
   void newGame();
   void nextLevel();
   void generateLevel();
+  void gotoxy(int x, int y);
+  void load();
+  void loading();
 
 private:
   enum {
@@ -33,10 +37,16 @@ private:
     GAME_STATE_GAMEOVER,
     GAME_STATE_LOADGAME,
     GAME_STATE_SETTINGS,
+    GAME_STATE_PAUSE,
+    GAME_SAVE
   } gameState;
 
+  int sound = 1;
   float timeAccumulator;
   int selectedMenuItem;
+  int selectedSettingItem;
+  int selectedPauseItem;
+  int selectedLoadItem;
   int currentLevel;
   int coinEaten;
 
