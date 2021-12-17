@@ -9,6 +9,7 @@ int main() {
 
   Game game;
   if (game.Construct(250, 360, 2, 2, false, true)) {
+    game.loading();
     game.Start();
   }
 

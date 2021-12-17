@@ -11,6 +11,11 @@ public:
   void moveDown(float fElapsedTime);
   void moveLeft(float fElapsedTime);
   void moveRight(float fElapsedTime);
+  void init();
+  int getX();
+  int getY();
+  void setX(int x);
+  void setY(int y);
 
   void draw(olc::PixelGameEngine* pge);
 };
