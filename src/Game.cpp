@@ -244,6 +244,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
         {
             LOAD_ITEMS.push_back(input);
         }
+        LOAD_ITEMS.push_back("Back To Pause");
         f.close();
           if (GetKey(olc::ENTER).bPressed) {
               if (selectedLoadItem == 0) {
@@ -254,25 +255,32 @@ bool Game::OnUserUpdate(float fElapsedTime) {
                   // Save 2
                   LOAD_ITEMS[1] = "Save_2";
               }
-              else {
+              else if (selectedLoadItem == 2) {
                   // Save 3
                   LOAD_ITEMS[2] = "Save_3";
               }
-              ofstream fo("src/checkpoint.txt");
-              for (int i = 0; i < 3; i++)
-                  fo << LOAD_ITEMS[i] << endl;
-              fo.close();
-              ofstream fout("src/" + LOAD_ITEMS[selectedLoadItem] + ".dat", ios::binary);
-              fout.write((char*)&currentLevel, sizeof(currentLevel));
-              int score = coinEaten * 10;
-              fout.write((char*)&score, sizeof(score));
-              int X = player->getX();
-              fout.write((char*)&X, sizeof(X));
-              int Y = player->getY();
-              fout.write((char*)&Y, sizeof(Y));
-              fout.close();
-              Sleep(100);
-              gameState = GAME_STATE_MENU;
+              if (selectedLoadItem == 3)
+              {
+                  gameState = GAME_STATE_PAUSE;
+              }
+              else
+              {
+                  ofstream fo("src/checkpoint.txt");
+                  for (int i = 0; i < 3; i++)
+                      fo << LOAD_ITEMS[i] << endl;
+                  fo.close();
+                  ofstream fout("src/" + LOAD_ITEMS[selectedLoadItem] + ".dat", ios::binary);
+                  fout.write((char*)&currentLevel, sizeof(currentLevel));
+                  int score = coinEaten * 10;
+                  fout.write((char*)&score, sizeof(score));
+                  int X = player->getX();
+                  fout.write((char*)&X, sizeof(X));
+                  int Y = player->getY();
+                  fout.write((char*)&Y, sizeof(Y));
+                  fout.close();
+                  Sleep(100);
+                  gameState = GAME_STATE_MENU;
+              }
           }
           else if (GetKey(olc::DOWN).bPressed) {
               ++selectedLoadItem;
@@ -315,17 +323,25 @@ bool Game::OnUserUpdate(float fElapsedTime) {
             //cout << input << endl;
             LOAD_ITEMS.push_back(input);
         }
+        LOAD_ITEMS.push_back("Back To Menu");
       if (GetKey(olc::ENTER).bPressed) {
-          ifstream fin  ("src/" + LOAD_ITEMS[selectedLoadItem] + ".dat", ios::out | ios::binary);
-          fin.read((char*)&currentLevel, sizeof(currentLevel));
-          fin.read((char*)&coinEaten, sizeof(coinEaten));
-          int k = player->getX();
-          fin.read((char*)&k , sizeof(k));
-          player->setX(k);
-          k = player->getY();
-          fin.read((char*)&k, sizeof(k));
-          player->setY(k);
-          gameState = GAME_STATE_PLAY;
+          if (selectedLoadItem == 3)
+          {
+              gameState = GAME_STATE_MENU;
+          }
+          else
+          {
+              ifstream fin("src/" + LOAD_ITEMS[selectedLoadItem] + ".dat", ios::out | ios::binary);
+              fin.read((char*)&currentLevel, sizeof(currentLevel));
+              fin.read((char*)&coinEaten, sizeof(coinEaten));
+              int k = player->getX();
+              fin.read((char*)&k, sizeof(k));
+              player->setX(k);
+              k = player->getY();
+              fin.read((char*)&k, sizeof(k));
+              player->setY(k);
+              gameState = GAME_STATE_PLAY;
+          }
       }
       else if (GetKey(olc::DOWN).bPressed) {
           ++selectedLoadItem;
