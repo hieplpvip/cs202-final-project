@@ -205,14 +205,14 @@ bool Game::OnUserUpdate(float fElapsedTime) {
         }
         else if (GetKey(olc::DOWN).bPressed) {
             ++selectedPauseItem;
-            if (selectedPauseItem >= Constants::PAUSE_ITEMS[0].size()) {
+            if (selectedPauseItem >= Constants::PAUSE_ITEMS.size()) {
                 selectedPauseItem = 0;
             }
         }
         else if (GetKey(olc::UP).bPressed) {
             --selectedPauseItem;
             if (selectedPauseItem < 0) {
-                selectedPauseItem = (int)Constants::PAUSE_ITEMS[0].size() - 1;
+                selectedPauseItem = (int)Constants::PAUSE_ITEMS.size() - 1;
             }
         }
         //cout << selectedSettingItem << endl;
