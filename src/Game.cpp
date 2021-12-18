@@ -386,14 +386,14 @@ bool Game::OnUserUpdate(float fElapsedTime) {
             }
             else if (GetKey(olc::DOWN).bPressed) {
                 ++selectedSettingItem;
-                if (selectedSettingItem >= Constants::SETTING_ITEMS[0].size()) {
+                if (selectedSettingItem >= Constants::SETTING_ITEMS.size()) {
                     selectedSettingItem = 0;
                 }
             }
             else if (GetKey(olc::UP).bPressed) {
                 --selectedSettingItem;
                 if (selectedSettingItem < 0) {
-                    selectedSettingItem = (int)Constants::SETTING_ITEMS[0].size() - 1;
+                    selectedSettingItem = (int)Constants::SETTING_ITEMS.size() - 1;
                 }
             }
             //cout << selectedSettingItem << endl;
