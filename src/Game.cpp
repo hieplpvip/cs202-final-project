@@ -237,7 +237,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       break;
     }
     case GAME_SAVE: {
-        ifstream f("src/checkpoint.txt");
+        ifstream f("src/SaveGame/checkpoint.txt");
         std::vector<std::string> LOAD_ITEMS;
         string input;
         while (getline(f , input))
@@ -265,11 +265,11 @@ bool Game::OnUserUpdate(float fElapsedTime) {
               }
               else
               {
-                  ofstream fo("src/checkpoint.txt");
+                  ofstream fo("src/SaveGame/checkpoint.txt");
                   for (int i = 0; i < 3; i++)
                       fo << LOAD_ITEMS[i] << endl;
                   fo.close();
-                  ofstream fout("src/" + LOAD_ITEMS[selectedLoadItem] + ".dat", ios::binary);
+                  ofstream fout("src/SaveGame/" + LOAD_ITEMS[selectedLoadItem] + ".dat", ios::binary);
                   fout.write((char*)&currentLevel, sizeof(currentLevel));
                   int score = coinEaten * 10;
                   fout.write((char*)&score, sizeof(score));
@@ -278,8 +278,6 @@ bool Game::OnUserUpdate(float fElapsedTime) {
                   int Y = player->getY();
                   fout.write((char*)&Y, sizeof(Y));
                   fout.close();
-                  Sleep(100);
-                  gameState = GAME_STATE_MENU;
               }
           }
           else if (GetKey(olc::DOWN).bPressed) {
@@ -315,7 +313,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       break;
     }
     case GAME_STATE_LOADGAME: {
-        ifstream f("src/checkpoint.txt");
+        ifstream f("src/SaveGame/checkpoint.txt");
         std::vector<std::string> LOAD_ITEMS;
         string input;
         while (getline(f, input))
@@ -331,7 +329,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
           }
           else
           {
-              ifstream fin("src/" + LOAD_ITEMS[selectedLoadItem] + ".dat", ios::out | ios::binary);
+              ifstream fin("src/SaveGame/" + LOAD_ITEMS[selectedLoadItem] + ".dat", ios::out | ios::binary);
               fin.read((char*)&currentLevel, sizeof(currentLevel));
               fin.read((char*)&coinEaten, sizeof(coinEaten));
               int k = player->getX();
