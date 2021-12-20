@@ -183,6 +183,13 @@ bool Game::OnUserUpdate(float fElapsedTime) {
         player->moveRight(fElapsedTime);
       }
 
+      trafficLight->update(fElapsedTime);
+      if (trafficLight->getColor() != RED) {
+          level->update(fElapsedTime);
+      }
+
+      level->draw(pge);
+      trafficLight->draw(pge);
       player->draw(this);
 
       break;
