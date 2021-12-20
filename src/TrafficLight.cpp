@@ -36,21 +36,21 @@ void TrafficLight::update(float fElapsedTime) {
 void TrafficLight::draw(olc::PixelGameEngine* pge) {
 	if (currentColor == GREEN) 	{
 		// draw green light
-		sprite = new olc::Sprite("assets/graphics/light_green.png");
+		sprite = new olc::Sprite("assets/graphics/Traffic Green.png");
 		if (sprite)
 			pge->DrawSprite(pos, sprite);
 	}
 
 	else if (currentColor == YELLOW) 	{
 		// draw yellow light
-		sprite = new olc::Sprite("assets/graphics/light_yellow.png");
+		sprite = new olc::Sprite("assets/graphics/Traffic Yellow.png");
 		if (sprite)
 			pge->DrawSprite(pos, sprite);
 	}
 
 	else 	{
 		// draw red light
-		sprite = new olc::Sprite("assets/graphics/light_red.png");
+		sprite = new olc::Sprite("assets/graphics/Traffic Red.png");
 		if (sprite)
 			pge->DrawSprite(pos, sprite);
 	}
