@@ -20,6 +20,9 @@ public:
   Lane(olc::vf2d pos, int direction, float timeBetweenObstacles, float obstacleSpeed, int seed);
   ~Lane();
 
+  static bool loadData();
+  static void unloadData();
+
   void setSeed(long long seed);
   void update(float fElapsedTime);
   void draw();
@@ -40,7 +43,8 @@ private:
   std::vector<Obstacle*> obstacles;
   // std::vector<Coin*> coins;
   Coin* coin;
-  olc::Sprite* sprite = nullptr;
+
+  static olc::Sprite* spr;
 };
 
 #endif

@@ -26,7 +26,11 @@ private:
   static olc::Sprite *sprGreen;
   static olc::Sprite *sprYellow;
   static olc::Sprite *sprRed;
+  static olc::Decal *decGreen;
+  static olc::Decal *decYellow;
+  static olc::Decal *decRed;
 
+  float scale;
   float timeAccumulator;
   TrafficLightColor currentColor;
 };

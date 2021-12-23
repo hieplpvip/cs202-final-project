@@ -77,6 +77,7 @@ bool Game::OnUserCreate() {
   if (!Car::loadData()) return false;
   if (!Coin::loadData()) return false;
   if (!Elephant::loadData()) return false;
+  if (!Lane::loadData()) return false;
   if (!TrafficLight::loadData()) return false;
   if (!Truck::loadData()) return false;
 
@@ -85,7 +86,7 @@ bool Game::OnUserCreate() {
   selectedMenuItem = 0;
   selectedPauseItem = 0;
   selectedSettingItem = 0;
-  currentLevel = 1;
+  currentLevel = 10;
   coinEaten = 0;
 
   player = new Player();
@@ -101,14 +102,14 @@ bool Game::OnUserUpdate(float fElapsedTime) {
 
   switch (gameState) {
     case GAME_STATE_TITLE: {
-      int titleScale = 2;
-      olc::vi2d titleSize = GetTextSize(Constants::TITLE) * titleScale;
+      float titleScale = 1.5f;
+      olc::vi2d titleSize = (olc::vf2d)(GetTextSize(Constants::TITLE)) * titleScale;
       olc::vi2d titlePos = ScreenSize() / 2 - titleSize / 2;
-      DrawString(titlePos, Constants::TITLE, olc::RED, titleScale);
+      DrawStringDecal(titlePos, Constants::TITLE, olc::RED, {titleScale, titleScale});
 
       if (timeAccumulator > Constants::TITLE_DURATION || GetMouse(0).bPressed || GetKey(olc::SPACE).bPressed) {
         gameState = GAME_STATE_MENU;
-        // timeAccumulator = 0;
+        timeAccumulator = 0;
       }
 
       break;
@@ -463,6 +464,7 @@ bool Game::OnUserDestroy() {
   Car::unloadData();
   Coin::unloadData();
   Elephant::unloadData();
+  Lane::unloadData();
   TrafficLight::unloadData();
   Truck::unloadData();
 
