@@ -20,7 +20,7 @@ public:
 
   void setDirection(DIRECTION direction);
   void move(float fElapsedTime);
-  void draw(olc::PixelGameEngine* pge);
+  void draw();
   void playCollisionSound();
 
 protected:

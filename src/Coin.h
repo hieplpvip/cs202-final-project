@@ -8,7 +8,7 @@ private:
   olc::Sprite* sprite = nullptr;
 
 public:
-  void draw(olc::PixelGameEngine* pge);
+  void draw();
 };
 
 #endif

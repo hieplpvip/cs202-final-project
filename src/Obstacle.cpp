@@ -26,7 +26,7 @@ void Obstacle::move(float fElapsedTime) {
   }
 }
 
-void Obstacle::draw(olc::PixelGameEngine* pge) {
+void Obstacle::draw() {
   if (sprite) {
     pge->DrawSprite(pos, sprite);
   }

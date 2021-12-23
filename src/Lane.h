@@ -22,7 +22,7 @@ public:
 
   void setSeed(long long seed);
   void update(float fElapsedTime);
-  void draw(olc::PixelGameEngine* pge);
+  void draw();
 
   Obstacle* generateObstacle();
 

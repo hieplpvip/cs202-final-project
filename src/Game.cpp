@@ -181,9 +181,9 @@ bool Game::OnUserUpdate(float fElapsedTime) {
         level->update(fElapsedTime);
       }
 
-      level->draw(pge);
-      trafficLight->draw(pge);
-      player->draw(this);
+      level->draw();
+      trafficLight->draw();
+      player->draw();
 
       break;
     }
@@ -262,9 +262,8 @@ bool Game::OnUserUpdate(float fElapsedTime) {
           fout.write((char*)&currentLevel, sizeof(currentLevel));
           int score = coinEaten * 10;
           fout.write((char*)&score, sizeof(score));
-          int X = player->getX();
+          auto [X, Y] = player->getPosition();
           fout.write((char*)&X, sizeof(X));
-          int Y = player->getY();
           fout.write((char*)&Y, sizeof(Y));
           fout.close();
         }
@@ -315,12 +314,10 @@ bool Game::OnUserUpdate(float fElapsedTime) {
           ifstream fin("src/SaveGame/" + LOAD_ITEMS[selectedLoadItem] + ".dat", ios::out | ios::binary);
           fin.read((char*)&currentLevel, sizeof(currentLevel));
           fin.read((char*)&coinEaten, sizeof(coinEaten));
-          int k = player->getX();
-          fin.read((char*)&k, sizeof(k));
-          player->setX(k);
-          k = player->getY();
-          fin.read((char*)&k, sizeof(k));
-          player->setY(k);
+          float X, Y;
+          fin.read((char*)&X, sizeof(X));
+          fin.read((char*)&Y, sizeof(Y));
+          player->setPosition({X, Y});
           gameState = GAME_STATE_PLAY;
         }
       } else if (GetKey(olc::DOWN).bPressed) {

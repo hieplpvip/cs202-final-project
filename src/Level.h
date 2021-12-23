@@ -16,7 +16,7 @@ public:
 
   void setSeed(long long seed);
   void update(float fElapsedTime);
-  void draw(olc::PixelGameEngine* pge);
+  void draw();
 
   bool checkCollision(Player* player);
   void checkCoin(Player* player, int& coinEaten);
