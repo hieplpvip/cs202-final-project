@@ -15,5 +15,7 @@ void Coin::unloadData() {
 }
 
 void Coin::draw() {
+  pge->SetPixelMode(olc::Pixel::MASK);
   pge->DrawSprite(pos, spr);
+  pge->SetPixelMode(olc::Pixel::NORMAL);
 }
