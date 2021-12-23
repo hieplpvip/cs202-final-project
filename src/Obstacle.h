@@ -16,16 +16,13 @@ enum DIRECTION {
 class Obstacle : public Entity {
 public:
   Obstacle();
-  ~Obstacle();
 
   void setDirection(DIRECTION direction);
   void move(float fElapsedTime);
-  void draw();
   void playCollisionSound();
 
 protected:
   int snd;
-  olc::Sprite* sprite = nullptr;
   DIRECTION direction;
 };
 

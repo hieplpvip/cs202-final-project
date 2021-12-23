@@ -1,12 +1,32 @@
 #include "Truck.h"
 
+olc::Sprite *Truck::sprLeft = nullptr;
+olc::Sprite *Truck::sprRight = nullptr;
+
+bool Truck::loadData() {
+  sprLeft = new olc::Sprite("assets/graphics/Truck_left.png");
+  sprRight = new olc::Sprite("assets/graphics/Truck_right.png");
+
+  return sprLeft != nullptr && sprRight != nullptr;
+}
+
+void Truck::unloadData() {
+  if (sprLeft) {
+    delete sprLeft;
+    sprRight = nullptr;
+  }
+  if (sprRight) {
+    delete sprRight;
+    sprRight = nullptr;
+  }
+}
+
 void Truck::draw() {
   if (direction == LEFT) {
-    sprite = new olc::Sprite("assets/graphics/Truck_left.png");
+    pge->DrawSprite(pos, sprLeft);
   } else {
-    sprite = new olc::Sprite("assets/graphics/Truck_right.png");
+    pge->DrawSprite(pos, sprRight);
   }
-  Obstacle::draw();
 }
 
 void Truck::playCollisionSound() {

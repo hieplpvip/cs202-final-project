@@ -5,12 +5,6 @@ Obstacle::Obstacle() {
   size = {20, 20};
 }
 
-Obstacle::~Obstacle() {
-  if (sprite) {
-    delete sprite;
-  }
-}
-
 void Obstacle::setDirection(DIRECTION direction) {
   this->direction = direction;
 }
@@ -23,12 +17,6 @@ void Obstacle::move(float fElapsedTime) {
     case LEFT:
       pos.x -= fElapsedTime * speed;
       break;
-  }
-}
-
-void Obstacle::draw() {
-  if (sprite) {
-    pge->DrawSprite(pos, sprite);
   }
 }
 

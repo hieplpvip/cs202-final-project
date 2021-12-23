@@ -1,6 +1,33 @@
 #include "TrafficLight.h"
 #include "Logging.h"
 
+olc::Sprite *TrafficLight::sprGreen = nullptr;
+olc::Sprite *TrafficLight::sprYellow = nullptr;
+olc::Sprite *TrafficLight::sprRed = nullptr;
+
+bool TrafficLight::loadData() {
+  sprGreen = new olc::Sprite("assets/graphics/Traffic Green.png");
+  sprYellow = new olc::Sprite("assets/graphics/Traffic Yellow.png");
+  sprRed = new olc::Sprite("assets/graphics/Traffic Red.png");
+
+  return sprGreen != nullptr && sprYellow != nullptr && sprRed != nullptr;
+}
+
+void TrafficLight::unloadData() {
+  if (sprGreen) {
+    delete sprGreen;
+    sprGreen = nullptr;
+  }
+  if (sprYellow) {
+    delete sprYellow;
+    sprYellow = nullptr;
+  }
+  if (sprRed) {
+    delete sprRed;
+    sprRed = nullptr;
+  }
+}
+
 TrafficLight::TrafficLight() {
   timeAccumulator = 0;
   currentColor = GREEN;
@@ -36,26 +63,13 @@ void TrafficLight::update(float fElapsedTime) {
 void TrafficLight::draw() {
   if (currentColor == GREEN) {
     // draw green light
-    sprite = new olc::Sprite("assets/graphics/Traffic Green.png");
-    if (sprite) {
-      pge->DrawSprite(pos, sprite);
-    }
-  }
-
-  else if (currentColor == YELLOW) {
+    pge->DrawSprite(pos, sprGreen);
+  } else if (currentColor == YELLOW) {
     // draw yellow light
-    sprite = new olc::Sprite("assets/graphics/Traffic Yellow.png");
-    if (sprite) {
-      pge->DrawSprite(pos, sprite);
-    }
-  }
-
-  else {
+    pge->DrawSprite(pos, sprYellow);
+  } else {
     // draw red light
-    sprite = new olc::Sprite("assets/graphics/Traffic Red.png");
-    if (sprite) {
-      pge->DrawSprite(pos, sprite);
-    }
+    pge->DrawSprite(pos, sprRed);
   }
 }
 

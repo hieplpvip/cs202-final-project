@@ -1,14 +1,32 @@
 #include "Bird.h"
 
+olc::Sprite *Bird::sprLeft = nullptr;
+olc::Sprite *Bird::sprRight = nullptr;
+
+bool Bird::loadData() {
+  sprLeft = new olc::Sprite("assets/graphics/Bird_fly_left.png");
+  sprRight = new olc::Sprite("assets/graphics/Bird_fly_right.png");
+
+  return sprLeft != nullptr && sprRight != nullptr;
+}
+
+void Bird::unloadData() {
+  if (sprLeft) {
+    delete sprLeft;
+    sprRight = nullptr;
+  }
+  if (sprRight) {
+    delete sprRight;
+    sprRight = nullptr;
+  }
+}
+
 void Bird::draw() {
   if (direction == LEFT) {
-    sprite = new olc::Sprite("assets/graphics/Bird_fly_left.png");
-    // sprite = new olc::Sprite("assets/graphics/Bird_walk_left.png");
+    pge->DrawSprite(pos, sprLeft);
   } else {
-    sprite = new olc::Sprite("assets/graphics/Bird_fly_right.png");
-    // sprite = new olc::Sprite("assets/graphics/Bird_fly_left.png");
+    pge->DrawSprite(pos, sprRight);
   }
-  Obstacle::draw();
 }
 
 void Bird::playCollisionSound() {

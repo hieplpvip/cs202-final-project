@@ -4,11 +4,14 @@
 #include "Entity.h"
 
 class Coin : public Entity {
-private:
-  olc::Sprite* sprite = nullptr;
-
 public:
+  static bool loadData();
+  static void unloadData();
+
   void draw();
+
+private:
+  static olc::Sprite* spr;
 };
 
 #endif

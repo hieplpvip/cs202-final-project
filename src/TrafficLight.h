@@ -13,6 +13,9 @@ class TrafficLight : public Entity {
 public:
   TrafficLight();
 
+  static bool loadData();
+  static void unloadData();
+
   void reset();
   void update(float fElapsedTime);
   void draw();
@@ -20,7 +23,10 @@ public:
   TrafficLightColor getColor() const;
 
 private:
-  olc::Sprite* sprite = nullptr;
+  static olc::Sprite *sprGreen;
+  static olc::Sprite *sprYellow;
+  static olc::Sprite *sprRed;
+
   float timeAccumulator;
   TrafficLightColor currentColor;
 };
