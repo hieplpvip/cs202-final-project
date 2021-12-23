@@ -27,7 +27,6 @@ Game::Game() {
 
 bool Game::loadData() {
   if (!Bird::loadData()) return false;
-  std::cout << "aaa" << std::endl;
   if (!Car::loadData()) return false;
   if (!Coin::loadData()) return false;
   if (!Elephant::loadData()) return false;
@@ -211,6 +210,30 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       level->draw();
       trafficLight->draw();
       player->draw();
+
+      if (level->checkCollision(player)) {
+        Logging::info("Hit obstacle! Game lost\n");
+        gameState = GAME_STATE_GAMEOVER;
+        timeAccumulator = 0;
+        return true;
+      }
+
+      // Check if player earns any coins
+      level->checkCoin(player, coinEaten);
+
+      if (level->isComplete(player)) {
+        if (currentLevel < Constants::NUMBER_OF_LEVELS) {
+          // Go to next level
+          Logging::info("Level %d completed. Go to next level!\n", currentLevel);
+          nextLevel();
+        } else {
+          // Win game
+          Logging::info("Game won!\n");
+          gameState = GAME_STATE_WIN;
+          timeAccumulator = 0;
+        }
+        return true;
+      }
 
       break;
     }
@@ -459,6 +482,12 @@ void Game::newGame() {
   gameState = GAME_STATE_PLAY;
   coinEaten = 0;
   timeAccumulator = 0;
+  generateLevel();
+}
+
+void Game::nextLevel() {
+  assert(currentLevel < Constants::NUMBER_OF_LEVELS);
+  ++currentLevel;
   generateLevel();
 }
 

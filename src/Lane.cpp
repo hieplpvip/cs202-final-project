@@ -8,7 +8,7 @@ Lane::Lane(olc::vf2d pos, int direction, float timeBetweenObstacles, float obsta
   this->setSeed(seed);
   this->timeAccumulator = 0;
 
-  // Initialize first obstacle
+  // Initialize the first obstacle
   Obstacle* obstacle = generateObstacle();
   obstacle->setDirection(direction == 0 ? LEFT : RIGHT);
   obstacle->setPosition({(float)rnd.next((double)(pge->ScreenWidth() - obstacle->getSize().x)), pos.y + (30 - obstacle->getSize().y) / 2.0f});
@@ -36,24 +36,25 @@ void Lane::setSeed(long long seed) {
 }
 
 void Lane::update(float fElapsedTime) {
-  // TODO: check for out of window
-
-  // TODO: generate new obstacles
-
-  // TODO: generate coins
-
   timeAccumulator += fElapsedTime;
 
-  for (auto& obstacle : obstacles) obstacle->move(fElapsedTime);
+  // Move obstacles
+  for (auto& obstacle : obstacles) {
+    obstacle->move(fElapsedTime);
+  }
+
+  // Remove obstacles that have moved out of window
   for (auto it = obstacles.begin(); it != obstacles.end();) {
     if ((*it)->getPosition().x > pge->ScreenWidth()) {
       Logging::debug("[Lane::update] Removing out-of-window obstacle\n");
       delete *it;
       it = obstacles.erase(it);
-    } else
+    } else {
       ++it;
+    }
   }
 
+  // Generate new obstacles with probability 1/5
   if (timeAccumulator >= timeBetweenObstacles) {
     timeAccumulator = 0;
     if (rnd.next(5) == 0) {
@@ -68,19 +69,18 @@ void Lane::update(float fElapsedTime) {
 }
 
 void Lane::draw() {
-  // TODO
-  // draw the road
+  // Draw the road
   sprite = new olc::Sprite("assets/graphics/Lane.png");
   if (sprite) {
     pge->DrawSprite(pos, sprite);
   }
 
-  // draw obstacles
+  // Draw the obstacles
   for (auto& obstacle : obstacles) {
     obstacle->draw();
   }
 
-  // draw coin
+  // Draw the coin (if not eaten yet)
   if (coin != nullptr) {
     coin->draw();
   }
@@ -101,8 +101,7 @@ bool Lane::checkCollision(Player* player) {
 }
 
 void Lane::checkCoin(Player* player, int& coinEaten) {
-  if (coin == nullptr) return;
-  if (coin->intersectWithEntity(player)) {
+  if (coin != nullptr && coin->intersectWithEntity(player)) {
     Logging::info("Coin eaten\n");
     coinEaten += 1;
     delete coin;

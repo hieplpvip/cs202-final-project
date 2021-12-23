@@ -7,6 +7,7 @@ Level::Level(float timeBetweenObstacles, float obstacleSpeed, int numberOfLanes,
   this->player = player;
   this->setSeed(seed);
 
+  // Initialize the lanes
   topLanePos = (pge->ScreenHeight() - 30 * numberOfLanes) / 2;
   bottomLanePos = topLanePos + 30 * numberOfLanes;
   for (int i = 0; i < numberOfLanes; i++) {
@@ -14,6 +15,7 @@ Level::Level(float timeBetweenObstacles, float obstacleSpeed, int numberOfLanes,
     lanes.push_back(lane);
   }
 
+  // Set initial position of the player
   player->setPosition({pge->ScreenWidth() / 2.0f, (float)bottomLanePos});
 }
 
@@ -29,27 +31,26 @@ void Level::setSeed(long long seed) {
 }
 
 void Level::update(float fElapsedTime) {
-  // TODO
   for (auto& lane : lanes) {
     lane->update(fElapsedTime);
   }
 }
 
 void Level::draw() {
-  // TODO
-  // draw pavements
-  /*sprite = new olc::Sprite("assets/graphics/Pavement.png");
+  // TODO: draw pavements
+  /*
+  sprite = new olc::Sprite("assets/graphics/Pavement.png");
   if (sprite)
-          pge->DrawSprite(pos, sprite);*/
+    pge->DrawSprite(pos, sprite);
+  */
 
-  // draw lane
+  // Draw the lanes
   for (auto& lane : lanes) {
     lane->draw();
   }
 }
 
 bool Level::checkCollision(Player* player) {
-  // TODO
   for (auto& lane : lanes) {
     if (lane->checkCollision(player)) {
       return true;
@@ -59,13 +60,11 @@ bool Level::checkCollision(Player* player) {
 }
 
 void Level::checkCoin(Player* player, int& coinEaten) {
-  // TODO
   for (auto& lane : lanes) {
     lane->checkCoin(player, coinEaten);
   }
 }
 
 bool Level::isComplete(Player* player) {
-  // TODO
-  return (int)(player->getPosition().y + player->getSize().y < topLanePos);
+  return (int)(player->getPosition().y + player->getSize().y) < topLanePos;
 }
