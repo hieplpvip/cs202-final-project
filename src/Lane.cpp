@@ -100,7 +100,16 @@ void Lane::draw() {
 }
 
 Obstacle* Lane::generateObstacle() {
-  return new Bird();
+  int type = rnd.next(4);
+  if (type == 0) {
+    return new Bird();
+  } else if (type == 1) {
+    return new Car();
+  } else if (type == 2) {
+    return new Elephant();
+  } else {
+    return new Truck();
+  }
 }
 
 bool Lane::checkCollision(Player* player) {
