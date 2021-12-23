@@ -9,8 +9,15 @@ int main() {
 
   Game game;
   if (game.Construct(250, 360, 2, 2, false, true)) {
+    if (!Game::loadData()) {
+      Logging::error("[main] Failed to load game data\n");
+      return 1;
+    }
+
     game.loading();
     game.Start();
+
+    Game::unloadData();
   }
 
   Logging::info("Press Enter to exit...");

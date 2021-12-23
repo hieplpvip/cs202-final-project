@@ -1,9 +1,16 @@
 #include "Game.h"
 #include <cassert>
+#include <cstring>
 #include <iostream>
 #include "Constants.h"
 #include "Logging.h"
-using namespace std;
+
+// Entities
+#include "Bird.h"
+#include "Car.h"
+#include "Coin.h"
+#include "Elephant.h"
+#include "Truck.h"
 
 olc::PixelGameEngine* pge = nullptr;
 
@@ -16,6 +23,26 @@ olc::PixelGameEngine* pge = nullptr;
 Game::Game() {
   pge = this;
   sAppName = "Crossing Road";
+}
+
+bool Game::loadData() {
+  if (!Bird::loadData()) return false;
+  std::cout << "aaa" << std::endl;
+  if (!Car::loadData()) return false;
+  if (!Coin::loadData()) return false;
+  if (!Elephant::loadData()) return false;
+  if (!TrafficLight::loadData()) return false;
+  if (!Truck::loadData()) return false;
+  return true;
+}
+
+void Game::unloadData() {
+  Bird::unloadData();
+  Car::unloadData();
+  Coin::unloadData();
+  Elephant::unloadData();
+  TrafficLight::unloadData();
+  Truck::unloadData();
 }
 
 void Game::gotoxy(int x, int y) {
@@ -35,28 +62,28 @@ void Game::load() {
 
     Sleep(50);
 
-    cout << "[";
+    std::cout << "[";
     for (int i = 0; i < barWidth; i++) {
       if (i < pos) {
-        cout << "=";
+        std::cout << "=";
       } else if (i == pos) {
-        cout << ">";
+        std::cout << ">";
       } else {
-        cout << " ";
+        std::cout << " ";
       }
     }
-    cout << "]" << int(progress * 100.0) << " %\r";
-    cout.flush();
+    std::cout << "]" << int(progress * 100.0) << " %\r";
+    std::cout.flush();
 
     progress += 0.01f;
   }
-  cout << endl;
+  std::cout << std::endl;
 }
 
 void Game::loading() {
   PlaySound(TEXT("MenuSound.wav"), NULL, SND_LOOP | SND_ASYNC);
   gotoxy(55, 14);
-  cout << "Loading..." << endl;
+  std::cout << "Loading..." << std::endl;
   // gotoxy(10, 16);
   load();
 }
@@ -210,7 +237,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
           selectedPauseItem = (int)Constants::PAUSE_ITEMS.size() - 1;
         }
       }
-      // cout << selectedSettingItem << endl;
+      // std::cout << selectedSettingItem << endl;
       int height = GetTextSize(Constants::PAUSE_ITEMS[0]).y * 2;
       int offset = (ScreenHeight() - height * (int)Constants::PAUSE_ITEMS.size()) / 2;
       for (int i = 0; i < (int)Constants::PAUSE_ITEMS.size(); ++i) {
@@ -232,10 +259,10 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       break;
     }
     case GAME_SAVE: {
-      ifstream f("src/SaveGame/checkpoint.txt");
+      std::ifstream f("src/SaveGame/checkpoint.txt");
       std::vector<std::string> LOAD_ITEMS;
-      string input;
-      while (getline(f, input)) {
+      std::string input;
+      while (std::getline(f, input)) {
         LOAD_ITEMS.push_back(input);
       }
       LOAD_ITEMS.push_back("Back To Pause");
@@ -254,11 +281,12 @@ bool Game::OnUserUpdate(float fElapsedTime) {
         if (selectedLoadItem == 3) {
           gameState = GAME_STATE_PAUSE;
         } else {
-          ofstream fo("src/SaveGame/checkpoint.txt");
-          for (int i = 0; i < 3; i++)
-            fo << LOAD_ITEMS[i] << endl;
+          std::ofstream fo("src/SaveGame/checkpoint.txt");
+          for (int i = 0; i < 3; i++) {
+            fo << LOAD_ITEMS[i] << std::endl;
+          }
           fo.close();
-          ofstream fout("src/SaveGame/" + LOAD_ITEMS[selectedLoadItem] + ".dat", ios::binary);
+          std::ofstream fout("src/SaveGame/" + LOAD_ITEMS[selectedLoadItem] + ".dat", std::ios::binary);
           fout.write((char*)&currentLevel, sizeof(currentLevel));
           int score = coinEaten * 10;
           fout.write((char*)&score, sizeof(score));
@@ -278,7 +306,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
           selectedLoadItem = (int)LOAD_ITEMS.size() - 1;
         }
       }
-      // cout << selectedSettingItem << endl;
+      // std::cout << selectedSettingItem << endl;
       int height = GetTextSize(LOAD_ITEMS[0]).y * 2;
       int offset = (ScreenHeight() - height * (int)LOAD_ITEMS.size()) / 2;
       for (int i = 0; i < (int)LOAD_ITEMS.size(); ++i) {
@@ -299,11 +327,11 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       break;
     }
     case GAME_STATE_LOADGAME: {
-      ifstream f("src/SaveGame/checkpoint.txt");
+      std::ifstream f("src/SaveGame/checkpoint.txt");
       std::vector<std::string> LOAD_ITEMS;
-      string input;
-      while (getline(f, input)) {
-        // cout << input << endl;
+      std::string input;
+      while (std::getline(f, input)) {
+        // std::cout << input << endl;
         LOAD_ITEMS.push_back(input);
       }
       LOAD_ITEMS.push_back("Back To Menu");
@@ -311,7 +339,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
         if (selectedLoadItem == 3) {
           gameState = GAME_STATE_MENU;
         } else {
-          ifstream fin("src/SaveGame/" + LOAD_ITEMS[selectedLoadItem] + ".dat", ios::out | ios::binary);
+          std::ifstream fin("src/SaveGame/" + LOAD_ITEMS[selectedLoadItem] + ".dat", std::ios::out | std::ios::binary);
           fin.read((char*)&currentLevel, sizeof(currentLevel));
           fin.read((char*)&coinEaten, sizeof(coinEaten));
           float X, Y;
@@ -331,7 +359,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
           selectedLoadItem = (int)LOAD_ITEMS.size() - 1;
         }
       }
-      // cout << selectedSettingItem << endl;
+      // std::cout << selectedSettingItem << endl;
       int height = GetTextSize(LOAD_ITEMS[0]).y * 2;
       int offset = (ScreenHeight() - height * (int)LOAD_ITEMS.size()) / 2;
       for (int i = 0; i < (int)LOAD_ITEMS.size(); ++i) {
@@ -383,7 +411,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
           selectedSettingItem = (int)Constants::SETTING_ITEMS.size() - 1;
         }
       }
-      // cout << selectedSettingItem << endl;
+      // std::cout << selectedSettingItem << endl;
       int height = GetTextSize(Constants::SETTING_ITEMS[0]).y * 2;
       int offset = (ScreenHeight() - height * (int)Constants::SETTING_ITEMS.size()) / 2;
       for (int i = 0; i < (int)Constants::SETTING_ITEMS.size(); ++i) {
@@ -399,7 +427,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
           else
             DrawStringDecal(textPos, Constants::SETTING_ITEMS[i] + "ON", textColor, {textScale, textScale});
         } else if (i == 0) {
-          DrawStringDecal(textPos, Constants::SETTING_ITEMS[i] + to_string(currentLevel), textColor, {textScale, textScale});
+          DrawStringDecal(textPos, Constants::SETTING_ITEMS[i] + std::to_string(currentLevel), textColor, {textScale, textScale});
         }
         DrawStringDecal(textPos, Constants::SETTING_ITEMS[i], textColor, {textScale, textScale});
       }

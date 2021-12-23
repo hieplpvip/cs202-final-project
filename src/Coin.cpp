@@ -1,8 +1,19 @@
 #include "Coin.h"
 
-void Coin::draw() {
-  sprite = new olc::Sprite("assets/graphics/Coin S.png");
-  if (sprite) {
-    pge->DrawSprite(pos, sprite);
+olc::Sprite *Coin::spr = nullptr;
+
+bool Coin::loadData() {
+  spr = new olc::Sprite("assets/graphics/Coin S.png");
+  return spr != nullptr;
+}
+
+void Coin::unloadData() {
+  if (spr) {
+    delete spr;
+    spr = nullptr;
   }
+}
+
+void Coin::draw() {
+  pge->DrawSprite(pos, spr);
 }

@@ -9,7 +9,6 @@
 #include "Level.h"
 #include "Player.h"
 #include "TrafficLight.h"
-#include "string"
 
 class Game : public olc::PixelGameEngine {
 public:
@@ -25,6 +24,9 @@ public:
   void gotoxy(int x, int y);
   void load();
   void loading();
+
+  static bool loadData();
+  static void unloadData();
 
 private:
   enum {
