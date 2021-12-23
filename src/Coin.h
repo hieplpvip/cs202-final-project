@@ -2,11 +2,11 @@
 #define COIN_H
 
 #include "Entity.h"
-extern olc::PixelGameEngine* pge;
 
 class Coin : public Entity {
 private:
-	olc::Sprite* sprite = nullptr;
+  olc::Sprite* sprite = nullptr;
+
 public:
   void draw(olc::PixelGameEngine* pge);
 };

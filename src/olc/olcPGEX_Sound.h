@@ -64,7 +64,7 @@
 
 	Author
 	~~~~~~
-	David Barr, aka javidx9, ©OneLoneCoder 2019
+	David Barr, aka javidx9, ï¿½OneLoneCoder 2019
 */
 
 
@@ -388,7 +388,7 @@ namespace olc
 				else
 				{
 					// Calculate sample position
-					s.nSamplePosition += roundf((float)vecAudioSamples[s.nAudioSampleID - 1].wavHeader.nSamplesPerSec * fTimeStep);
+					s.nSamplePosition += (long)roundf((float)vecAudioSamples[s.nAudioSampleID - 1].wavHeader.nSamplesPerSec * fTimeStep);
 
 					// If sample position is valid add to the mix
 					if (s.nSamplePosition < vecAudioSamples[s.nAudioSampleID - 1].nSamples)

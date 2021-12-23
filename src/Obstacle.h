@@ -1,6 +1,11 @@
 #ifndef OBSTACLE_H
 #define OBSTACLE_H
 
+// clang-format off
+#include "olcPixelGameEngine.h"
+#include "olcPGEX_Sound.h"
+// clang-format on
+
 #include "Entity.h"
 
 enum DIRECTION {
@@ -10,14 +15,12 @@ enum DIRECTION {
 
 class Obstacle : public Entity {
 public:
-	Obstacle();
+  Obstacle();
+  ~Obstacle();
+
   void setDirection(DIRECTION direction);
   void move(float fElapsedTime);
   void draw(olc::PixelGameEngine* pge);
-  ~Obstacle() {
-	  if (sprite)
-		  delete sprite;
-  }
   void playCollisionSound();
 
 protected:

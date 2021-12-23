@@ -2,21 +2,24 @@
 #define LANE_H
 
 #include <vector>
+#include "Bird.h"
+#include "Car.h"
 #include "Coin.h"
+#include "Elephant.h"
+#include "Logging.h"
 #include "Obstacle.h"
 #include "Player.h"
 #include "Random.h"
-#include "olcPixelGameEngine.h"
-#include "Bird.h"
-#include "Car.h"
 #include "Truck.h"
-#include "Elephant.h"
-#include "Logging.h"
+#include "olcPixelGameEngine.h"
+
+extern olc::PixelGameEngine* pge;
 
 class Lane {
 public:
-	Lane(olc::vf2d pos, int direction, float timeBetweenObstacles, float obstacleSpeed, int seed);
-	~Lane();
+  Lane(olc::vf2d pos, int direction, float timeBetweenObstacles, float obstacleSpeed, int seed);
+  ~Lane();
+
   void setSeed(long long seed);
   void update(float fElapsedTime);
   void draw(olc::PixelGameEngine* pge);
@@ -27,15 +30,15 @@ public:
   void checkCoin(Player* player, int& coinEaten);
 
 private:
-	olc::vf2d pos;
-	int direction;
-	float timeBetweenObstacles;
-	float obstacleSpeed;
-	float timeAccumulator;
+  olc::vf2d pos;
+  int direction;
+  float timeBetweenObstacles;
+  float obstacleSpeed;
+  float timeAccumulator;
 
   Random rnd;
   std::vector<Obstacle*> obstacles;
-  //std::vector<Coin*> coins;
+  // std::vector<Coin*> coins;
   Coin* coin;
   olc::Sprite* sprite = nullptr;
 };

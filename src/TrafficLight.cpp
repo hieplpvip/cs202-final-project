@@ -7,53 +7,53 @@ TrafficLight::TrafficLight() {
 }
 
 void TrafficLight::reset() {
-	Logging::debug("[TrafficLight::reset] Resetting raffic light");
-	timeAccumulator = 0;
-	currentColor = GREEN;
+  Logging::debug("[TrafficLight::reset] Resetting raffic light");
+  timeAccumulator = 0;
+  currentColor = GREEN;
 }
 
 void TrafficLight::update(float fElapsedTime) {
-	timeAccumulator += fElapsedTime;
-	if (currentColor == GREEN && timeAccumulator >= 7.0f)	{
-		Logging::debug("[TrafficLight::update] Traffic light turns yellow");
-		currentColor = YELLOW;
-		timeAccumulator = 0;
-	}
+  timeAccumulator += fElapsedTime;
+  if (currentColor == GREEN && timeAccumulator >= 7.0f) {
+    Logging::debug("[TrafficLight::update] Traffic light turns yellow");
+    currentColor = YELLOW;
+    timeAccumulator = 0;
+  }
 
-	else if (currentColor == YELLOW && timeAccumulator >= 3.0f)	{
-		Logging::debug("[TrafficLight::update] Traffic light turns red");
-		currentColor = RED;
-		timeAccumulator = 0;
-	}
+  else if (currentColor == YELLOW && timeAccumulator >= 3.0f) {
+    Logging::debug("[TrafficLight::update] Traffic light turns red");
+    currentColor = RED;
+    timeAccumulator = 0;
+  }
 
-	else if (currentColor == RED && timeAccumulator >= 3.0f)	{
-		Logging::debug("[TrafficLight::update] Traffic light turns green");
-		currentColor = GREEN;
-		timeAccumulator = 0;
-	}
+  else if (currentColor == RED && timeAccumulator >= 3.0f) {
+    Logging::debug("[TrafficLight::update] Traffic light turns green");
+    currentColor = GREEN;
+    timeAccumulator = 0;
+  }
 }
 
 void TrafficLight::draw(olc::PixelGameEngine* pge) {
-	if (currentColor == GREEN) 	{
-		// draw green light
-		sprite = new olc::Sprite("assets/graphics/Traffic Green.png");
-		if (sprite)
-			pge->DrawSprite(pos, sprite);
-	}
+  if (currentColor == GREEN) {
+    // draw green light
+    sprite = new olc::Sprite("assets/graphics/Traffic Green.png");
+    if (sprite)
+      pge->DrawSprite(pos, sprite);
+  }
 
-	else if (currentColor == YELLOW) 	{
-		// draw yellow light
-		sprite = new olc::Sprite("assets/graphics/Traffic Yellow.png");
-		if (sprite)
-			pge->DrawSprite(pos, sprite);
-	}
+  else if (currentColor == YELLOW) {
+    // draw yellow light
+    sprite = new olc::Sprite("assets/graphics/Traffic Yellow.png");
+    if (sprite)
+      pge->DrawSprite(pos, sprite);
+  }
 
-	else 	{
-		// draw red light
-		sprite = new olc::Sprite("assets/graphics/Traffic Red.png");
-		if (sprite)
-			pge->DrawSprite(pos, sprite);
-	}
+  else {
+    // draw red light
+    sprite = new olc::Sprite("assets/graphics/Traffic Red.png");
+    if (sprite)
+      pge->DrawSprite(pos, sprite);
+  }
 }
 
 TrafficLightColor TrafficLight::getColor() const {
