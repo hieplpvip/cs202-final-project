@@ -50,7 +50,7 @@ void Level::draw() {
   }
 }
 
-bool Level::checkCollision(Player* player) {
+bool Level::checkCollision() {
   for (auto& lane : lanes) {
     if (lane->checkCollision(player)) {
       return true;
@@ -59,12 +59,12 @@ bool Level::checkCollision(Player* player) {
   return false;
 }
 
-void Level::checkCoin(Player* player, int& coinEaten) {
+void Level::checkCoin(int& coinEaten) {
   for (auto& lane : lanes) {
     lane->checkCoin(player, coinEaten);
   }
 }
 
-bool Level::isComplete(Player* player) {
+bool Level::isComplete() {
   return (int)(player->getPosition().y + player->getSize().y) < topLanePos;
 }
