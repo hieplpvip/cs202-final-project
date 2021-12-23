@@ -18,10 +18,10 @@ public:
   void update(float fElapsedTime);
   void draw();
 
-  bool checkCollision(Player* player);
-  void checkCoin(Player* player, int& coinEaten);
+  bool checkCollision();
+  void checkCoin(int& coinEaten);
 
-  bool isComplete(Player* player);
+  bool isComplete();
 
 private:
   float timeBetweenObstacles;

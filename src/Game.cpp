@@ -211,7 +211,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       trafficLight->draw();
       player->draw();
 
-      if (level->checkCollision(player)) {
+      if (level->checkCollision()) {
         Logging::info("Hit obstacle! Game lost\n");
         gameState = GAME_STATE_GAMEOVER;
         timeAccumulator = 0;
@@ -219,9 +219,9 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       }
 
       // Check if player earns any coins
-      level->checkCoin(player, coinEaten);
+      level->checkCoin(coinEaten);
 
-      if (level->isComplete(player)) {
+      if (level->isComplete()) {
         if (currentLevel < Constants::NUMBER_OF_LEVELS) {
           // Go to next level
           Logging::info("Level %d completed. Go to next level!\n", currentLevel);
