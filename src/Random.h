@@ -213,13 +213,13 @@ public:
   }
 
   /*
-     * Weighted next. If type == 0 than it is usual "next()".
-     *
-     * If type = 1, than it returns "max(next(), next())"
-     * (the number of "max" functions equals to "type").
-     *
-     * If type < 0, than "max" function replaces with "min".
-     */
+   * Weighted next. If type == 0 than it is usual "next()".
+   *
+   * If type = 1, than it returns "max(next(), next())"
+   * (the number of "max" functions equals to "type").
+   *
+   * If type < 0, than "max" function replaces with "min".
+   */
   int wnext(int n, int type) {
     if (n <= 0)
       __random_fail("Random::wnext(int n, int type): n must be positive");

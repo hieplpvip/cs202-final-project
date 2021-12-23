@@ -6,7 +6,6 @@
 #include "olcPGEX_Sound.h"
 // clang-format on
 
-#include "Player.h"
 #include "Level.h"
 #include "Player.h"
 #include "TrafficLight.h"

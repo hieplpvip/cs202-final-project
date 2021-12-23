@@ -20,7 +20,7 @@ public:
   TrafficLightColor getColor() const;
 
 private:
-	olc::Sprite* sprite = nullptr;
+  olc::Sprite* sprite = nullptr;
   float timeAccumulator;
   TrafficLightColor currentColor;
 };

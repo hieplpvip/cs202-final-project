@@ -4,9 +4,8 @@
 #include "Obstacle.h"
 
 class Elephant : public Obstacle {
-	void draw(olc::PixelGameEngine* pge);
-	void playCollisionSound();
+  void draw(olc::PixelGameEngine* pge);
+  void playCollisionSound();
 };
-
 
 #endif

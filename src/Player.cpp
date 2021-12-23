@@ -7,29 +7,23 @@ Player::Player() {
   // speed=70;
 }
 
-int Player::getX()
-{
-	return pos.x;
+int Player::getX() {
+  return (int)pos.x;
 }
 
-void Player::setX(int x)
-{
-	pos.x = x;
+void Player::setX(int x) {
+  pos.x = (float)x;
 }
 
-int Player::getY()
-{
-	return pos.y;
+int Player::getY() {
+  return (int)pos.y;
 }
 
-void Player::setY(int y)
-{
-	pos.y = y;
+void Player::setY(int y) {
+  pos.y = (float)y;
 }
 
-
-void Player::init()
-{
+void Player::init() {
   pos = {0, 0};
   size = {10, 10};
   speed = 50;
@@ -37,24 +31,24 @@ void Player::init()
 
 void Player::moveUp(float fElapsedTime) {
   pos.y -= fElapsedTime * speed;
-  //if (pos.y<0) pos.y=0;
+  // if (pos.y<0) pos.y=0;
 }
 
 void Player::moveDown(float fElapsedTime) {
   pos.y += fElapsedTime * speed;
   /*if (pos.y > (float)pge->ScreenHeight() - size.y)
-	  pos.y = (float)pge->ScreenHeight() - size.y;*/
+          pos.y = (float)pge->ScreenHeight() - size.y;*/
 }
 
 void Player::moveLeft(float fElapsedTime) {
   pos.x -= fElapsedTime * speed;
-  //if (pos.x<0) pos.x=0;
+  // if (pos.x<0) pos.x=0;
 }
 
 void Player::moveRight(float fElapsedTime) {
   pos.x += fElapsedTime * speed;
   /*if (pos.x > (float)pge->ScreenHeight() - size.x)
-	  pos.x = (float)pge->ScreenHeight() - size.x;*/
+          pos.x = (float)pge->ScreenHeight() - size.x;*/
 }
 
 void Player::draw(olc::PixelGameEngine* pge) {
