@@ -25,25 +25,6 @@ Game::Game() {
   sAppName = "Crossing Road";
 }
 
-bool Game::loadData() {
-  if (!Bird::loadData()) return false;
-  if (!Car::loadData()) return false;
-  if (!Coin::loadData()) return false;
-  if (!Elephant::loadData()) return false;
-  if (!TrafficLight::loadData()) return false;
-  if (!Truck::loadData()) return false;
-  return true;
-}
-
-void Game::unloadData() {
-  Bird::unloadData();
-  Car::unloadData();
-  Coin::unloadData();
-  Elephant::unloadData();
-  TrafficLight::unloadData();
-  Truck::unloadData();
-}
-
 void Game::gotoxy(int x, int y) {
   COORD d;
   d.X = x;
@@ -91,6 +72,13 @@ bool Game::OnUserCreate() {
   Logging::debug("[Game::OnUserCreate] Initializing game engine\n");
 
   olc::SOUND::InitialiseAudio();
+
+  if (!Bird::loadData()) return false;
+  if (!Car::loadData()) return false;
+  if (!Coin::loadData()) return false;
+  if (!Elephant::loadData()) return false;
+  if (!TrafficLight::loadData()) return false;
+  if (!Truck::loadData()) return false;
 
   gameState = GAME_STATE_TITLE;
   timeAccumulator = 0;
@@ -470,6 +458,13 @@ bool Game::OnUserUpdate(float fElapsedTime) {
 
 bool Game::OnUserDestroy() {
   Logging::debug("[Game::OnUserDestroy] Destroying objects\n");
+
+  Bird::unloadData();
+  Car::unloadData();
+  Coin::unloadData();
+  Elephant::unloadData();
+  TrafficLight::unloadData();
+  Truck::unloadData();
 
   olc::SOUND::DestroyAudio();
 
