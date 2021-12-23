@@ -25,9 +25,6 @@ public:
   void load();
   void loading();
 
-  static bool loadData();
-  static void unloadData();
-
 private:
   enum {
     GAME_STATE_TITLE,
