@@ -18,7 +18,7 @@ public:
 
   bool intersectWithEntity(Entity* other) const;
 
-  virtual void draw(olc::PixelGameEngine* pge) = 0;
+  virtual void draw() = 0;
 
 protected:
   olc::vf2d pos;

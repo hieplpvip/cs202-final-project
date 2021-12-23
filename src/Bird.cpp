@@ -1,6 +1,6 @@
 #include "Bird.h"
 
-void Bird::draw(olc::PixelGameEngine* pge) {
+void Bird::draw() {
   if (direction == LEFT) {
     sprite = new olc::Sprite("assets/graphics/Bird_fly_left.png");
     // sprite = new olc::Sprite("assets/graphics/Bird_walk_left.png");
@@ -8,7 +8,7 @@ void Bird::draw(olc::PixelGameEngine* pge) {
     sprite = new olc::Sprite("assets/graphics/Bird_fly_right.png");
     // sprite = new olc::Sprite("assets/graphics/Bird_fly_left.png");
   }
-  Obstacle::draw(pge);
+  Obstacle::draw();
 }
 
 void Bird::playCollisionSound() {

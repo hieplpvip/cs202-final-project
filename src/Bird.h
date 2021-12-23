@@ -4,7 +4,7 @@
 #include "Obstacle.h"
 
 class Bird : public Obstacle {
-  void draw(olc::PixelGameEngine* pge);
+  void draw();
   void playCollisionSound();
 };
 

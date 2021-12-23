@@ -15,7 +15,7 @@ public:
 
   void reset();
   void update(float fElapsedTime);
-  void draw(olc::PixelGameEngine* pge);
+  void draw();
 
   TrafficLightColor getColor() const;
 

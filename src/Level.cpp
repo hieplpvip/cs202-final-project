@@ -35,7 +35,7 @@ void Level::update(float fElapsedTime) {
   }
 }
 
-void Level::draw(olc::PixelGameEngine* pge) {
+void Level::draw() {
   // TODO
   // draw pavements
   /*sprite = new olc::Sprite("assets/graphics/Pavement.png");
@@ -44,7 +44,7 @@ void Level::draw(olc::PixelGameEngine* pge) {
 
   // draw lane
   for (auto& lane : lanes) {
-    lane->draw(pge);
+    lane->draw();
   }
 }
 
