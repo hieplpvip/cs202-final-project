@@ -1,5 +1,19 @@
 #include "Lane.h"
 
+olc::Sprite* Lane::spr = nullptr;
+
+bool Lane::loadData() {
+  spr = new olc::Sprite("assets/graphics/Lane.png");
+  return spr != nullptr;
+}
+
+void Lane::unloadData() {
+  if (spr) {
+    delete spr;
+    spr = nullptr;
+  }
+}
+
 Lane::Lane(olc::vf2d pos, int direction, float timeBetweenObstacles, float obstacleSpeed, int seed) {
   this->pos = pos;
   this->direction = direction;
@@ -11,13 +25,13 @@ Lane::Lane(olc::vf2d pos, int direction, float timeBetweenObstacles, float obsta
   // Initialize the first obstacle
   Obstacle* obstacle = generateObstacle();
   obstacle->setDirection(direction == 0 ? LEFT : RIGHT);
-  obstacle->setPosition({(float)rnd.next((double)(pge->ScreenWidth() - obstacle->getSize().x)), pos.y + (30 - obstacle->getSize().y) / 2.0f});
+  obstacle->setPosition({(float)rnd.next((double)(pge->ScreenWidth() - obstacle->getSize().x)), pos.y + (20 - obstacle->getSize().y) / 2.0f});
   obstacle->setSpeed(obstacleSpeed);
   obstacles.push_back(obstacle);
 
   // Initialize the coin
   coin = new Coin();
-  coin->setPosition({(float)rnd.next(pge->ScreenWidth() * 0.2f, pge->ScreenWidth() * 0.8f), pos.y + (30 - coin->getSize().y) / 2.0f});
+  coin->setPosition({(float)rnd.next(pge->ScreenWidth() * 0.2f, pge->ScreenWidth() * 0.8f), pos.y + (20 - coin->getSize().y) / 2.0f});
 }
 
 Lane::~Lane() {
@@ -61,7 +75,7 @@ void Lane::update(float fElapsedTime) {
       Logging::debug("[Lane::update] Generating new obstacle\n");
       Obstacle* obstacle = generateObstacle();
       obstacle->setDirection(direction == 0 ? LEFT : RIGHT);
-      obstacle->setPosition({direction == 0 ? pge->ScreenWidth() : -obstacle->getSize().x, pos.y + (30 - obstacle->getSize().y) / 2.0f});
+      obstacle->setPosition({direction == 0 ? pge->ScreenWidth() : -obstacle->getSize().x, pos.y + (20 - obstacle->getSize().y) / 2.0f});
       obstacle->setSpeed(obstacleSpeed);
       obstacles.push_back(obstacle);
     }
@@ -70,12 +84,9 @@ void Lane::update(float fElapsedTime) {
 
 void Lane::draw() {
   // Draw the road
-  sprite = new olc::Sprite("assets/graphics/Lane.png");
-  if (sprite) {
-    pge->SetPixelMode(olc::Pixel::MASK);
-    pge->DrawSprite(pos, sprite);
-    pge->SetPixelMode(olc::Pixel::NORMAL);
-  }
+  pge->SetPixelMode(olc::Pixel::MASK);
+  pge->DrawSprite(pos, spr);
+  pge->SetPixelMode(olc::Pixel::NORMAL);
 
   // Draw the obstacles
   for (auto& obstacle : obstacles) {

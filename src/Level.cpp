@@ -8,10 +8,10 @@ Level::Level(float timeBetweenObstacles, float obstacleSpeed, int numberOfLanes,
   this->setSeed(seed);
 
   // Initialize the lanes
-  topLanePos = (pge->ScreenHeight() - 30 * numberOfLanes) / 2;
-  bottomLanePos = topLanePos + 30 * numberOfLanes;
+  topLanePos = (pge->ScreenHeight() - 20 * numberOfLanes) / 2;
+  bottomLanePos = topLanePos + 20 * numberOfLanes;
   for (int i = 0; i < numberOfLanes; i++) {
-    Lane* lane = new Lane({0, (float)(topLanePos + i * 30)}, rnd.next(2), timeBetweenObstacles, obstacleSpeed, rnd.next(1000000000));
+    Lane* lane = new Lane({0, (float)(topLanePos + i * 20)}, rnd.next(2), timeBetweenObstacles, obstacleSpeed, rnd.next(1000000000));
     lanes.push_back(lane);
   }
 

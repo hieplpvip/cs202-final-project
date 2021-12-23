@@ -8,8 +8,8 @@ int main() {
   Logging::debug("[main] called\n");
 
   Game game;
-  if (game.Construct(250, 360, 2, 2, false, true)) {
-    game.loading();
+  if (game.Construct(200, 280, 2, 2, false, true)) {
+    // game.loading();
     game.Start();
   }
 
