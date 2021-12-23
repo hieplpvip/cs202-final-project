@@ -61,6 +61,7 @@ void TrafficLight::update(float fElapsedTime) {
 }
 
 void TrafficLight::draw() {
+  pge->SetPixelMode(olc::Pixel::MASK);
   if (currentColor == GREEN) {
     // draw green light
     pge->DrawSprite(pos, sprGreen);
@@ -71,6 +72,7 @@ void TrafficLight::draw() {
     // draw red light
     pge->DrawSprite(pos, sprRed);
   }
+  pge->SetPixelMode(olc::Pixel::NORMAL);
 }
 
 TrafficLightColor TrafficLight::getColor() const {

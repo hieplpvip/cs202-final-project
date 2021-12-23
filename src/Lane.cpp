@@ -72,7 +72,9 @@ void Lane::draw() {
   // Draw the road
   sprite = new olc::Sprite("assets/graphics/Lane.png");
   if (sprite) {
+    pge->SetPixelMode(olc::Pixel::MASK);
     pge->DrawSprite(pos, sprite);
+    pge->SetPixelMode(olc::Pixel::NORMAL);
   }
 
   // Draw the obstacles

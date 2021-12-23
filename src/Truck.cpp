@@ -22,11 +22,13 @@ void Truck::unloadData() {
 }
 
 void Truck::draw() {
+  pge->SetPixelMode(olc::Pixel::MASK);
   if (direction == LEFT) {
     pge->DrawSprite(pos, sprLeft);
   } else {
     pge->DrawSprite(pos, sprRight);
   }
+  pge->SetPixelMode(olc::Pixel::NORMAL);
 }
 
 void Truck::playCollisionSound() {
