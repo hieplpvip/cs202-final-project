@@ -486,6 +486,11 @@ template<typename T> class RBTree {
   }
 };
 
+int add(int a , int b)
+{
+	return a + b;
+}
+
 template <typename T> class RBTree<T>::RBTreeNode * RBTree<T>::nil = new RBTreeNode (-1,0,0);
 template <typename T> bool RBTree<T>::DEBUG = true;
 
