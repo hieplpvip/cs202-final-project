@@ -46,7 +46,10 @@ void Level::draw() {
 
   // Draw the lanes
   for (auto& lane : lanes) {
-    lane->draw();
+    lane->drawBackground();
+  }
+  for (auto& lane : lanes) {
+    lane->drawObjects();
   }
 }
 

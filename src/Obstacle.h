@@ -15,8 +15,6 @@ enum DIRECTION {
 
 class Obstacle : public Entity {
 public:
-  Obstacle();
-
   void setDirection(DIRECTION direction);
   void move(float fElapsedTime);
   void playCollisionSound();
