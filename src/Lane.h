@@ -25,7 +25,8 @@ public:
 
   void setSeed(long long seed);
   void update(float fElapsedTime);
-  void draw();
+  void drawBackground();
+  void drawObjects();
 
   Obstacle* generateObstacle();
 

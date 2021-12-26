@@ -82,12 +82,14 @@ void Lane::update(float fElapsedTime) {
   }
 }
 
-void Lane::draw() {
+void Lane::drawBackground() {
   // Draw the road
   pge->SetPixelMode(olc::Pixel::MASK);
   pge->DrawSprite(pos, spr);
   pge->SetPixelMode(olc::Pixel::NORMAL);
+}
 
+void Lane::drawObjects() {
   // Draw the obstacles
   for (auto& obstacle : obstacles) {
     obstacle->draw();
