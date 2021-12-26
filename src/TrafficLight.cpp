@@ -61,7 +61,7 @@ TrafficLight::TrafficLight() {
 }
 
 void TrafficLight::reset() {
-  Logging::debug("[TrafficLight::reset] Resetting traffic light");
+  Logging::debug("[TrafficLight::reset] Resetting traffic light\n");
   timeAccumulator = 0;
   currentColor = GREEN;
 }
@@ -69,19 +69,19 @@ void TrafficLight::reset() {
 void TrafficLight::update(float fElapsedTime) {
   timeAccumulator += fElapsedTime;
   if (currentColor == GREEN && timeAccumulator >= 7.0f) {
-    Logging::debug("[TrafficLight::update] Traffic light turns yellow");
+    Logging::debug("[TrafficLight::update] Traffic light turns yellow\n");
     currentColor = YELLOW;
     timeAccumulator = 0;
   }
 
   else if (currentColor == YELLOW && timeAccumulator >= 3.0f) {
-    Logging::debug("[TrafficLight::update] Traffic light turns red");
+    Logging::debug("[TrafficLight::update] Traffic light turns red\n");
     currentColor = RED;
     timeAccumulator = 0;
   }
 
   else if (currentColor == RED && timeAccumulator >= 3.0f) {
-    Logging::debug("[TrafficLight::update] Traffic light turns green");
+    Logging::debug("[TrafficLight::update] Traffic light turns green\n");
     currentColor = GREEN;
     timeAccumulator = 0;
   }
