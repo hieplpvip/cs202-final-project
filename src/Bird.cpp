@@ -3,6 +3,10 @@
 olc::Sprite *Bird::sprLeft = nullptr;
 olc::Sprite *Bird::sprRight = nullptr;
 
+Bird::Bird() {
+  size = {(float)sprLeft->width, (float)sprLeft->height};
+}
+
 bool Bird::loadData() {
   sprLeft = new olc::Sprite("assets/graphics/Bird_fly_left.png");
   sprRight = new olc::Sprite("assets/graphics/Bird_fly_right.png");

@@ -5,6 +5,8 @@
 
 class Bird : public Obstacle {
 public:
+  Bird();
+
   static bool loadData();
   static void unloadData();
 

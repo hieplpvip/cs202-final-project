@@ -3,6 +3,10 @@
 olc::Sprite *Car::sprLeft = nullptr;
 olc::Sprite *Car::sprRight = nullptr;
 
+Car::Car() {
+  size = {(float)sprLeft->width, (float)sprLeft->height};
+}
+
 bool Car::loadData() {
   sprLeft = new olc::Sprite("assets/graphics/Car_left.png");
   sprRight = new olc::Sprite("assets/graphics/Car_right.png");

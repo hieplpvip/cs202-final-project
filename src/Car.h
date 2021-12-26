@@ -5,6 +5,8 @@
 
 class Car : public Obstacle {
 public:
+  Car();
+
   static bool loadData();
   static void unloadData();
 

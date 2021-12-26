@@ -2,6 +2,10 @@
 
 olc::Sprite *Coin::spr = nullptr;
 
+Coin::Coin() {
+  size = {(float)spr->width, (float)spr->height};
+}
+
 bool Coin::loadData() {
   spr = new olc::Sprite("assets/graphics/Coin S.png");
   return spr != nullptr;
