@@ -5,6 +5,8 @@
 
 class Elephant : public Obstacle {
 public:
+  Elephant();
+
   static bool loadData();
   static void unloadData();
 

@@ -3,6 +3,10 @@
 olc::Sprite *Elephant::sprLeft = nullptr;
 olc::Sprite *Elephant::sprRight = nullptr;
 
+Elephant::Elephant() {
+  size = {(float)sprLeft->width, (float)sprLeft->height};
+}
+
 bool Elephant::loadData() {
   sprLeft = new olc::Sprite("assets/graphics/Elephant_left.png");
   sprRight = new olc::Sprite("assets/graphics/Elephant_right.png");

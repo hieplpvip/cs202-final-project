@@ -5,6 +5,8 @@
 
 class Coin : public Entity {
 public:
+  Coin();
+
   static bool loadData();
   static void unloadData();
 
