@@ -11,6 +11,9 @@ namespace Constants {
   const char* WIN = "You win!";
   const float WIN_DURATION = 3.0f;
 
+  const char* LOSE = "You lose!";
+  const float LOSE_DURATION = 3.0f;
+
   const int NUMBER_OF_LEVELS = 10;
 
   std::vector<std::string> MENU_ITEMS = {"New Game", "Load Game", "Settings", "Exit"};
