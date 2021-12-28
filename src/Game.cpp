@@ -5,13 +5,6 @@
 #include "Constants.h"
 #include "Logging.h"
 
-// Entities
-#include "Bird.h"
-#include "Car.h"
-#include "Coin.h"
-#include "Elephant.h"
-#include "Truck.h"
-
 olc::PixelGameEngine* pge = nullptr;
 
 #define delete_ptr(ptr) \
@@ -78,6 +71,7 @@ bool Game::OnUserCreate() {
   if (!Coin::loadData()) return false;
   if (!Elephant::loadData()) return false;
   if (!Lane::loadData()) return false;
+  if (!Level::loadData()) return false;
   if (!TrafficLight::loadData()) return false;
   if (!Truck::loadData()) return false;
 
@@ -172,9 +166,6 @@ bool Game::OnUserUpdate(float fElapsedTime) {
         return true;
       }
 
-      DrawString(10, 10, "Level: " + std::to_string(currentLevel), olc::RED);
-      DrawString(10, 20, "Score: " + std::to_string(coinEaten * 10), olc::RED);
-
       int dx = 0, dy = 0;
       if (GetKey(olc::LEFT).bHeld) --dx;
       if (GetKey(olc::RIGHT).bHeld) ++dx;
@@ -199,6 +190,9 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       level->draw();
       trafficLight->draw();
       player->draw();
+
+      DrawString(10, 10, "Level: " + std::to_string(currentLevel), olc::RED);
+      DrawString(10, 20, "Score: " + std::to_string(coinEaten * 10), olc::RED);
 
       if (level->checkCollision()) {
         Logging::info("Hit obstacle! Game lost\n");
@@ -465,6 +459,7 @@ bool Game::OnUserDestroy() {
   Coin::unloadData();
   Elephant::unloadData();
   Lane::unloadData();
+  Level::unloadData();
   TrafficLight::unloadData();
   Truck::unloadData();
 

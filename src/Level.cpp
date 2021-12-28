@@ -1,5 +1,19 @@
 #include "Level.h"
 
+olc::Sprite* Level::sprGrass = nullptr;
+
+bool Level::loadData() {
+  sprGrass = new olc::Sprite("assets/graphics/Grass.png");
+  return (sprGrass != nullptr);
+}
+
+void Level::unloadData() {
+  if (sprGrass) {
+    delete sprGrass;
+    sprGrass = nullptr;
+  }
+}
+
 Level::Level(float timeBetweenObstacles, float obstacleSpeed, int numberOfLanes, Player* player, int seed) {
   this->timeBetweenObstacles = timeBetweenObstacles;
   this->obstacleSpeed = obstacleSpeed;
@@ -37,12 +51,8 @@ void Level::update(float fElapsedTime) {
 }
 
 void Level::draw() {
-  // TODO: draw pavements
-  /*
-  sprite = new olc::Sprite("assets/graphics/Pavement.png");
-  if (sprite)
-    pge->DrawSprite(pos, sprite);
-  */
+  // Draw pavements
+  pge->DrawSprite({0, 0}, sprGrass);
 
   // Draw the lanes
   for (auto& lane : lanes) {

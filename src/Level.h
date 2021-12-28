@@ -14,6 +14,9 @@ public:
   Level(float timeBetweenObstacles, float obstacleSpeed, int numberOfLanes, Player* player, int seed);
   ~Level();
 
+  static bool loadData();
+  static void unloadData();
+
   void setSeed(long long seed);
   void update(float fElapsedTime);
   void draw();
@@ -33,7 +36,8 @@ private:
   Random rnd;
   Player* player;
   std::vector<Lane*> lanes;
-  olc::Sprite* sprite = nullptr;
+
+  static olc::Sprite* sprGrass;
 };
 
 #endif
