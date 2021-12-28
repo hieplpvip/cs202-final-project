@@ -255,6 +255,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
         olc::vi2d textPos = center - textSize / 2;
         DrawStringDecal(textPos, Constants::PAUSE_ITEMS[i], textColor, {textScale, textScale});
       }
+      break;
     }
     case GAME_STATE_WIN: {
       float winScale = 2.5f;
@@ -263,19 +264,28 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       winPos.y -= 10;
       DrawStringDecal(winPos, Constants::WIN, olc::RED, {winScale, winScale});
 
+      std::string score = "Your score: " + std::to_string(coinEaten * 10);
+      olc::vi2d scorePos = {ScreenWidth() / 2 - GetTextSize(score).x / 2, winPos.y + winSize.y + 10};
+      DrawString(scorePos, score, olc::RED);
+
       if (timeAccumulator > Constants::WIN_DURATION || GetMouse(0).bPressed || GetKey(olc::SPACE).bPressed) {
         gameState = GAME_STATE_MENU;
         timeAccumulator = 0;
       }
 
-      std::string score = "Your score: " + std::to_string(coinEaten * 10);
-      olc::vi2d scorePos = {ScreenWidth() / 2 - GetTextSize(score).x / 2, winPos.y + winSize.y + 10};
-      DrawString(scorePos, score, olc::RED);
-
       break;
     }
     case GAME_STATE_GAMEOVER: {
-      // TODO
+      float loseScale = 2.5f;
+      olc::vi2d loseSize = (olc::vf2d)(GetTextSize(Constants::LOSE)) * loseScale;
+      olc::vi2d losePos = ScreenSize() / 2 - loseSize / 2;
+      DrawStringDecal(losePos, Constants::LOSE, olc::RED, {loseScale, loseScale});
+
+      if (timeAccumulator > Constants::LOSE_DURATION || GetMouse(0).bPressed || GetKey(olc::SPACE).bPressed) {
+        gameState = GAME_STATE_MENU;
+        timeAccumulator = 0;
+      }
+
       break;
     }
     case GAME_SAVE: {
