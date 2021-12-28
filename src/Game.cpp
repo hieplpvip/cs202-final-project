@@ -257,7 +257,21 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       }
     }
     case GAME_STATE_WIN: {
-      // TODO
+      float winScale = 2.5f;
+      olc::vi2d winSize = (olc::vf2d)(GetTextSize(Constants::WIN)) * winScale;
+      olc::vi2d winPos = ScreenSize() / 2 - winSize / 2;
+      winPos.y -= 10;
+      DrawStringDecal(winPos, Constants::WIN, olc::RED, {winScale, winScale});
+
+      if (timeAccumulator > Constants::WIN_DURATION || GetMouse(0).bPressed || GetKey(olc::SPACE).bPressed) {
+        gameState = GAME_STATE_MENU;
+        timeAccumulator = 0;
+      }
+
+      std::string score = "Your score: " + std::to_string(coinEaten * 10);
+      olc::vi2d scorePos = {ScreenWidth() / 2 - GetTextSize(score).x / 2, winPos.y + winSize.y + 10};
+      DrawString(scorePos, score, olc::RED);
+
       break;
     }
     case GAME_STATE_GAMEOVER: {
