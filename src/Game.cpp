@@ -72,6 +72,7 @@ bool Game::OnUserCreate() {
   if (!Elephant::loadData()) return false;
   if (!Lane::loadData()) return false;
   if (!Level::loadData()) return false;
+  if (!Player::loadData()) return false;
   if (!TrafficLight::loadData()) return false;
   if (!Truck::loadData()) return false;
 
@@ -484,6 +485,7 @@ bool Game::OnUserDestroy() {
   Elephant::unloadData();
   Lane::unloadData();
   Level::unloadData();
+  Player::unloadData();
   TrafficLight::unloadData();
   Truck::unloadData();
 
