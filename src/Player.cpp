@@ -1,8 +1,35 @@
 #include "Player.h"
 
+olc::Sprite *Player::sprPlayer = nullptr;
+olc::Decal *Player::decPlayer = nullptr;
+
+bool Player::loadData() {
+  sprPlayer = new olc::Sprite("assets/graphics/Player.png");
+  if (sprPlayer == nullptr) {
+    return false;
+  }
+
+  decPlayer = new olc::Decal(sprPlayer);
+  if (decPlayer == nullptr) {
+    return false;
+  }
+
+  return true;
+}
+
+void Player::unloadData() {
+  if (decPlayer) {
+    delete decPlayer;
+    decPlayer = nullptr;
+  }
+  if (sprPlayer) {
+    delete sprPlayer;
+    sprPlayer = nullptr;
+  }
+}
+
 Player::Player() {
-  pos = {0, 0};
-  size = {10, 10};
+  size = {12, 16};
   speed = 50;
 }
 
@@ -35,5 +62,5 @@ void Player::moveRight(float fElapsedTime) {
 }
 
 void Player::draw() {
-  pge->FillRect(pos, size, olc::YELLOW);
+  pge->DrawPartialDecal(pos, decPlayer, olc::vf2d(4, 0) * vBlockSize, vBlockSize, {0.5f, 0.5f});
 }
