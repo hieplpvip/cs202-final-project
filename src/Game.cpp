@@ -66,15 +66,18 @@ bool Game::OnUserCreate() {
 
   olc::SOUND::InitialiseAudio();
 
-  if (!Bird::loadData()) return false;
-  if (!Car::loadData()) return false;
-  if (!Coin::loadData()) return false;
-  if (!Elephant::loadData()) return false;
-  if (!Lane::loadData()) return false;
-  if (!Level::loadData()) return false;
-  if (!Player::loadData()) return false;
-  if (!TrafficLight::loadData()) return false;
-  if (!Truck::loadData()) return false;
+  if (!Bird::loadData() ||
+      !Car::loadData() ||
+      !Coin::loadData() ||
+      !Elephant::loadData() ||
+      !Lane::loadData() ||
+      !Level::loadData() ||
+      !Player::loadData() ||
+      !TrafficLight::loadData() ||
+      !Truck::loadData()) {
+    Logging::error("[Game::OnUserCreate] Failed to load data\n");
+    return false;
+  }
 
   gameState = GAME_STATE_TITLE;
   timeAccumulator = 0;

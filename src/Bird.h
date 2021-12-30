@@ -15,6 +15,7 @@ public:
 
 private:
   static olc::Sprite *sprLeft, *sprRight;
+  static int sndCollision;
 };
 
 #endif

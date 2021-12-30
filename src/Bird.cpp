@@ -2,6 +2,7 @@
 
 olc::Sprite *Bird::sprLeft = nullptr;
 olc::Sprite *Bird::sprRight = nullptr;
+int Bird::sndCollision = -1;
 
 Bird::Bird() {
   size = {(float)sprLeft->width, (float)sprLeft->height};
@@ -10,8 +11,9 @@ Bird::Bird() {
 bool Bird::loadData() {
   sprLeft = new olc::Sprite("assets/graphics/Bird_fly_left.png");
   sprRight = new olc::Sprite("assets/graphics/Bird_fly_right.png");
+  sndCollision = olc::SOUND::LoadAudioSample("assets/sound/animal_collision.wav");
 
-  return sprLeft != nullptr && sprRight != nullptr;
+  return sprLeft != nullptr && sprRight != nullptr && sndCollision != -1;
 }
 
 void Bird::unloadData() {
@@ -36,6 +38,5 @@ void Bird::draw() {
 }
 
 void Bird::playCollisionSound() {
-  snd = olc::SOUND::LoadAudioSample("assets/sound/animal_collision.wav");
-  Obstacle::playCollisionSound();
+  olc::SOUND::PlaySample(sndCollision);
 }
