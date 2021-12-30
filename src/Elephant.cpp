@@ -2,6 +2,7 @@
 
 olc::Sprite *Elephant::sprLeft = nullptr;
 olc::Sprite *Elephant::sprRight = nullptr;
+int Elephant::sndCollision = -1;
 
 Elephant::Elephant() {
   size = {(float)sprLeft->width, (float)sprLeft->height};
@@ -10,8 +11,9 @@ Elephant::Elephant() {
 bool Elephant::loadData() {
   sprLeft = new olc::Sprite("assets/graphics/Elephant_left.png");
   sprRight = new olc::Sprite("assets/graphics/Elephant_right.png");
+  sndCollision = olc::SOUND::LoadAudioSample("assets/sound/animal_collision.wav");
 
-  return sprLeft != nullptr && sprRight != nullptr;
+  return sprLeft != nullptr && sprRight != nullptr && sndCollision != -1;
 }
 
 void Elephant::unloadData() {
@@ -36,6 +38,5 @@ void Elephant::draw() {
 }
 
 void Elephant::playCollisionSound() {
-  snd = olc::SOUND::LoadAudioSample("assets/sound/animal_collision.wav");
-  Obstacle::playCollisionSound();
+  olc::SOUND::PlaySample(sndCollision);
 }

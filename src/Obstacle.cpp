@@ -14,7 +14,3 @@ void Obstacle::move(float fElapsedTime) {
       break;
   }
 }
-
-void Obstacle::playCollisionSound() {
-  olc::SOUND::PlaySample(snd);
-}

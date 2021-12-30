@@ -17,10 +17,9 @@ class Obstacle : public Entity {
 public:
   void setDirection(DIRECTION direction);
   void move(float fElapsedTime);
-  void playCollisionSound();
+  virtual void playCollisionSound() = 0;
 
 protected:
-  int snd;
   DIRECTION direction;
 };
 

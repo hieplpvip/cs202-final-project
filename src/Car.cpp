@@ -2,6 +2,7 @@
 
 olc::Sprite *Car::sprLeft = nullptr;
 olc::Sprite *Car::sprRight = nullptr;
+int Car::sndCollision = -1;
 
 Car::Car() {
   size = {(float)sprLeft->width, (float)sprLeft->height};
@@ -10,8 +11,9 @@ Car::Car() {
 bool Car::loadData() {
   sprLeft = new olc::Sprite("assets/graphics/Car_left.png");
   sprRight = new olc::Sprite("assets/graphics/Car_right.png");
+  sndCollision = olc::SOUND::LoadAudioSample("assets/sound/vehicle_collision.wav");
 
-  return sprLeft != nullptr && sprRight != nullptr;
+  return sprLeft != nullptr && sprRight != nullptr && sndCollision != -1;
 }
 
 void Car::unloadData() {
@@ -36,6 +38,5 @@ void Car::draw() {
 }
 
 void Car::playCollisionSound() {
-  snd = olc::SOUND::LoadAudioSample("assets/sound/vehicle_collision.wav");
-  Obstacle::playCollisionSound();
+  olc::SOUND::PlaySample(sndCollision);
 };
