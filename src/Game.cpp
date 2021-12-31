@@ -4,6 +4,7 @@
 #include <iostream>
 #include "Constants.h"
 #include "Logging.h"
+#include "Utility.h"
 
 olc::PixelGameEngine* pge = nullptr;
 
@@ -268,7 +269,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
         } else if (selectedPauseItem == 1) {
           // Save Game
           selectedLoadItem = 0;
-          gameState = GAME_SAVE;
+          gameState = GAME_STATE_SAVEGAME;
         } else {
           // Back to menu
           gameState = GAME_STATE_MENU;
@@ -284,7 +285,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
           selectedPauseItem = (int)Constants::PAUSE_ITEMS.size() - 1;
         }
       }
-      // std::cout << selectedSettingItem << endl;
+
       int height = GetTextSize(Constants::PAUSE_ITEMS[0]).y * 2;
       int offset = (ScreenHeight() - height * (int)Constants::PAUSE_ITEMS.size()) / 2;
       for (int i = 0; i < (int)Constants::PAUSE_ITEMS.size(); ++i) {
@@ -333,119 +334,111 @@ bool Game::OnUserUpdate(float fElapsedTime) {
 
       break;
     }
-    case GAME_SAVE: {
-      std::ifstream f("src/SaveGame/checkpoint.txt");
-      std::vector<std::string> LOAD_ITEMS;
-      std::string input;
-      while (std::getline(f, input)) {
-        LOAD_ITEMS.push_back(input);
-      }
-      LOAD_ITEMS.push_back("Back To Pause");
-      f.close();
-      if (GetKey(olc::ENTER).bPressed) {
-        if (selectedLoadItem == 0) {
-          // Save 1
-          LOAD_ITEMS[0] = "Save_1";
-        } else if (selectedLoadItem == 1) {
-          // Save 2
-          LOAD_ITEMS[1] = "Save_2";
-        } else if (selectedLoadItem == 2) {
-          // Save 3
-          LOAD_ITEMS[2] = "Save_3";
+    case GAME_STATE_SAVEGAME: {
+      std::vector<std::string> ITEMS;
+      for (int i = 1; i <= Constants::NUMBER_OF_SAVE_SLOTS; ++i) {
+        std::string filename = "SaveGame/save_" + std::to_string(i) + ".dat";
+        if (fileExists(filename)) {
+          ITEMS.push_back("Slot " + std::to_string(i) + " (saved)");
+        } else {
+          ITEMS.push_back("Slot " + std::to_string(i) + " (empty)");
         }
-        if (selectedLoadItem == 3) {
+      }
+      ITEMS.push_back("Back To Menu");
+
+      if (GetKey(olc::ENTER).bPressed) {
+        if (selectedLoadItem == (int)ITEMS.size() - 1) {
           gameState = GAME_STATE_PAUSE;
         } else {
-          std::ofstream fo("src/SaveGame/checkpoint.txt");
-          for (int i = 0; i < 3; i++) {
-            fo << LOAD_ITEMS[i] << std::endl;
-          }
-          fo.close();
-          std::ofstream fout("src/SaveGame/" + LOAD_ITEMS[selectedLoadItem] + ".dat", std::ios::binary);
-          fout.write((char*)&currentLevel, sizeof(currentLevel));
-          fout.write((char*)&currentPoints, sizeof(currentPoints));
-          fout.write((char*)&coinEaten, sizeof(coinEaten));
+          std::string filename = "SaveGame/save_" + std::to_string(selectedLoadItem + 1) + ".dat";
+          std::ofstream f(filename, std::ios::binary);
+          f.write((char*)&currentLevel, sizeof(currentLevel));
+          f.write((char*)&currentPoints, sizeof(currentPoints));
+          f.write((char*)&coinEaten, sizeof(coinEaten));
           auto [X, Y] = player->getPosition();
-          fout.write((char*)&X, sizeof(X));
-          fout.write((char*)&Y, sizeof(Y));
-          fout.close();
+          f.write((char*)&X, sizeof(X));
+          f.write((char*)&Y, sizeof(Y));
+          f.close();
         }
       } else if (GetKey(olc::DOWN).bPressed) {
         ++selectedLoadItem;
-        if (selectedLoadItem >= LOAD_ITEMS.size()) {
+        if (selectedLoadItem >= ITEMS.size()) {
           selectedLoadItem = 0;
         }
       } else if (GetKey(olc::UP).bPressed) {
         --selectedLoadItem;
         if (selectedLoadItem < 0) {
-          selectedLoadItem = (int)LOAD_ITEMS.size() - 1;
+          selectedLoadItem = (int)ITEMS.size() - 1;
         }
       }
-      // std::cout << selectedSettingItem << endl;
-      int height = GetTextSize(LOAD_ITEMS[0]).y * 2;
-      int offset = (ScreenHeight() - height * (int)LOAD_ITEMS.size()) / 2;
-      for (int i = 0; i < (int)LOAD_ITEMS.size(); ++i) {
+
+      int height = GetTextSize(ITEMS[0]).y * 2;
+      int offset = (ScreenHeight() - height * (int)ITEMS.size()) / 2;
+      for (int i = 0; i < (int)ITEMS.size(); ++i) {
         float textScale = (i == selectedLoadItem) ? 1.5f : 1.2f;
         olc::Pixel textColor = (i == selectedLoadItem) ? olc::YELLOW : olc::WHITE;
 
         olc::vi2d center = {ScreenWidth() / 2, offset + height * (2 * i + 1) / 2};
-        olc::vi2d textSize = (olc::vf2d)(GetTextSize(LOAD_ITEMS[i])) * textScale;
+        olc::vi2d textSize = (olc::vf2d)(GetTextSize(ITEMS[i])) * textScale;
         olc::vi2d textPos = center - textSize / 2;
-        DrawStringDecal(textPos, LOAD_ITEMS[i], textColor, {textScale, textScale});
-      }
-
-      if (timeAccumulator > 101) {
-        gameState = GAME_STATE_MENU;
-        timeAccumulator = 0;
+        DrawStringDecal(textPos, ITEMS[i], textColor, {textScale, textScale});
       }
 
       break;
     }
     case GAME_STATE_LOADGAME: {
-      std::ifstream f("src/SaveGame/checkpoint.txt");
-      std::vector<std::string> LOAD_ITEMS;
-      std::string input;
-      while (std::getline(f, input)) {
-        // std::cout << input << endl;
-        LOAD_ITEMS.push_back(input);
+      std::vector<std::string> ITEMS;
+      for (int i = 1; i <= Constants::NUMBER_OF_SAVE_SLOTS; ++i) {
+        std::string filename = "SaveGame/save_" + std::to_string(i) + ".dat";
+        if (fileExists(filename)) {
+          ITEMS.push_back("Slot " + std::to_string(i) + " (saved)");
+        } else {
+          ITEMS.push_back("Slot " + std::to_string(i) + " (empty)");
+        }
       }
-      LOAD_ITEMS.push_back("Back To Menu");
+      ITEMS.push_back("Back To Menu");
+
       if (GetKey(olc::ENTER).bPressed) {
-        if (selectedLoadItem == 3) {
+        if (selectedLoadItem == (int)ITEMS.size() - 1) {
           gameState = GAME_STATE_MENU;
         } else {
-          std::ifstream fin("src/SaveGame/" + LOAD_ITEMS[selectedLoadItem] + ".dat", std::ios::out | std::ios::binary);
-          fin.read((char*)&currentLevel, sizeof(currentLevel));
-          fin.read((char*)&currentPoints, sizeof(currentPoints));
-          fin.read((char*)&coinEaten, sizeof(coinEaten));
-          float X, Y;
-          fin.read((char*)&X, sizeof(X));
-          fin.read((char*)&Y, sizeof(Y));
-          player->setPosition({X, Y});
-          gameState = GAME_STATE_PLAY;
+          std::string filename = "SaveGame/save_" + std::to_string(selectedLoadItem + 1) + ".dat";
+          if (fileExists(filename)) {
+            std::ifstream f(filename, std::ios::out | std::ios::binary);
+            f.read((char*)&currentLevel, sizeof(currentLevel));
+            f.read((char*)&currentPoints, sizeof(currentPoints));
+            f.read((char*)&coinEaten, sizeof(coinEaten));
+            float X, Y;
+            f.read((char*)&X, sizeof(X));
+            f.read((char*)&Y, sizeof(Y));
+            f.close();
+
+            player->setPosition({X, Y});
+            gameState = GAME_STATE_PLAY;
+          }
         }
       } else if (GetKey(olc::DOWN).bPressed) {
         ++selectedLoadItem;
-        if (selectedLoadItem >= LOAD_ITEMS.size()) {
+        if (selectedLoadItem >= ITEMS.size()) {
           selectedLoadItem = 0;
         }
       } else if (GetKey(olc::UP).bPressed) {
         --selectedLoadItem;
         if (selectedLoadItem < 0) {
-          selectedLoadItem = (int)LOAD_ITEMS.size() - 1;
+          selectedLoadItem = (int)ITEMS.size() - 1;
         }
       }
-      // std::cout << selectedSettingItem << endl;
-      int height = GetTextSize(LOAD_ITEMS[0]).y * 2;
-      int offset = (ScreenHeight() - height * (int)LOAD_ITEMS.size()) / 2;
-      for (int i = 0; i < (int)LOAD_ITEMS.size(); ++i) {
+
+      int height = GetTextSize(ITEMS[0]).y * 2;
+      int offset = (ScreenHeight() - height * (int)ITEMS.size()) / 2;
+      for (int i = 0; i < (int)ITEMS.size(); ++i) {
         float textScale = (i == selectedLoadItem) ? 1.5f : 1.2f;
         olc::Pixel textColor = (i == selectedLoadItem) ? olc::YELLOW : olc::WHITE;
 
         olc::vi2d center = {ScreenWidth() / 2, offset + height * (2 * i + 1) / 2};
-        olc::vi2d textSize = (olc::vf2d)(GetTextSize(LOAD_ITEMS[i])) * textScale;
+        olc::vi2d textSize = (olc::vf2d)(GetTextSize(ITEMS[i])) * textScale;
         olc::vi2d textPos = center - textSize / 2;
-        DrawStringDecal(textPos, LOAD_ITEMS[i], textColor, {textScale, textScale});
+        DrawStringDecal(textPos, ITEMS[i], textColor, {textScale, textScale});
       }
 
       if (timeAccumulator > 100) {
@@ -487,7 +480,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
           selectedSettingItem = (int)Constants::SETTING_ITEMS.size() - 1;
         }
       }
-      // std::cout << selectedSettingItem << endl;
+
       int height = GetTextSize(Constants::SETTING_ITEMS[0]).y * 2;
       int offset = (ScreenHeight() - height * (int)Constants::SETTING_ITEMS.size()) / 2;
       for (int i = 0; i < (int)Constants::SETTING_ITEMS.size(); ++i) {

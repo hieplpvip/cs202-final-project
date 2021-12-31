@@ -33,10 +33,10 @@ private:
     GAME_STATE_PLAY,
     GAME_STATE_WIN,
     GAME_STATE_GAMEOVER,
+    GAME_STATE_SAVEGAME,
     GAME_STATE_LOADGAME,
     GAME_STATE_SETTINGS,
     GAME_STATE_PAUSE,
-    GAME_SAVE
   } gameState;
 
   float timeAccumulator;
