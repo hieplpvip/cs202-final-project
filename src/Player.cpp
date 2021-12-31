@@ -30,7 +30,7 @@ void Player::unloadData() {
 
 Player::Player() {
   size = {12, 16};
-  speed = 50;
+  speed = 70;
 }
 
 void Player::moveUp(float fElapsedTime) {

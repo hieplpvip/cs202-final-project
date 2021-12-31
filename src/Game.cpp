@@ -48,6 +48,7 @@ bool Game::OnUserCreate() {
   selectedMenuItem = 0;
   selectedPauseItem = 0;
   selectedSettingItem = 0;
+  difficulty = 1;
   soundEnabled = 1;
   currentSound = -1;
   currentLevel = 1;
@@ -236,7 +237,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       level->checkCoin(coinEaten);
 
       if (level->isComplete()) {
-        currentPoints += 10 * currentLevel;
+        currentPoints += 10 * currentLevel * difficulty;
         if (currentLevel < Constants::NUMBER_OF_LEVELS) {
           // Go to next level
           gameState = GAME_STATE_NEXTLEVEL;
@@ -541,6 +542,7 @@ void Game::newGame() {
   currentPoints = 0;
   coinEaten = 0;
   timeAccumulator = 0;
+  currentLevel = 1;
   generateLevel();
   currentSound = sndInGame;
   olc::SOUND::PlaySample(currentSound, true);
@@ -561,6 +563,13 @@ void Game::generateLevel() {
   Logging::debug("[Game::generateLevel] Generate level %d\n", currentLevel);
   delete_ptr(level);
   auto [timeBetweenObstacles, obstacleSpeed, numberOfLanes] = Constants::LEVELS_CONFIG[currentLevel - 1];
+  if (difficulty == 2) {
+    timeBetweenObstacles *= 0.8f;
+    obstacleSpeed *= 1.2f;
+  } else if (difficulty == 3) {
+    timeBetweenObstacles *= 0.6f;
+    obstacleSpeed *= 1.5f;
+  }
   level = new Level(timeBetweenObstacles, obstacleSpeed, numberOfLanes, player, currentLevel);
   trafficLight->reset();
 }
