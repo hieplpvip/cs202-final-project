@@ -44,6 +44,7 @@ private:
   int selectedSettingItem;
   int selectedPauseItem;
   int selectedLoadItem;
+  int difficulty;
   int soundEnabled;
   int currentSound;
   int currentLevel;

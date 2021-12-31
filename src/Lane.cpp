@@ -68,10 +68,10 @@ void Lane::update(float fElapsedTime) {
     }
   }
 
-  // Generate new obstacles with probability 1/5
   if (timeAccumulator >= timeBetweenObstacles) {
+    // Generate new obstacles with probability 1/3
     timeAccumulator = 0;
-    if (rnd.next(5) == 0) {
+    if (rnd.next(3) == 0) {
       Logging::debug("[Lane::update] Generating new obstacle\n");
       Obstacle* obstacle = generateObstacle();
       obstacle->setDirection(direction == 0 ? LEFT : RIGHT);
