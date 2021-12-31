@@ -352,6 +352,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
         } else {
           std::string filename = "SaveGame/save_" + std::to_string(selectedLoadItem + 1) + ".dat";
           std::ofstream f(filename, std::ios::binary);
+          f.write((char*)&difficulty, sizeof(difficulty));
           f.write((char*)&currentLevel, sizeof(currentLevel));
           f.write((char*)&currentPoints, sizeof(currentPoints));
           f.write((char*)&coinEaten, sizeof(coinEaten));
@@ -405,6 +406,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
           std::string filename = "SaveGame/save_" + std::to_string(selectedLoadItem + 1) + ".dat";
           if (fileExists(filename)) {
             std::ifstream f(filename, std::ios::out | std::ios::binary);
+            f.read((char*)&difficulty, sizeof(difficulty));
             f.read((char*)&currentLevel, sizeof(currentLevel));
             f.read((char*)&currentPoints, sizeof(currentPoints));
             f.read((char*)&coinEaten, sizeof(coinEaten));
