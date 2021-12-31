@@ -8,6 +8,9 @@ namespace Constants {
   const char* TITLE = "Crossing Road";
   const float TITLE_DURATION = 3.0f;
 
+  const char* LOADING = "LOADING...";
+  const float LOADING_DURATION = 2.0f;
+
   const char* WIN = "You win!";
   const float WIN_DURATION = 3.0f;
 
