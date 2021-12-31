@@ -47,6 +47,7 @@ private:
   int soundEnabled;
   int currentSound;
   int currentLevel;
+  int currentPoints;
   int coinEaten;
 
   Player* player;

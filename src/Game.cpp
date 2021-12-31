@@ -51,6 +51,7 @@ bool Game::OnUserCreate() {
   soundEnabled = 1;
   currentSound = -1;
   currentLevel = 1;
+  currentPoints = 0;
   coinEaten = 0;
 
   player = new Player();
@@ -218,7 +219,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       player->draw();
 
       DrawString(10, 10, "Level: " + std::to_string(currentLevel), olc::RED);
-      DrawString(10, 20, "Score: " + std::to_string(coinEaten * 10), olc::RED);
+      DrawString(10, 20, "Score: " + std::to_string(currentPoints + coinEaten * 10), olc::RED);
 
       if (level->checkCollision()) {
         Logging::info("Hit obstacle! Game lost\n");
@@ -235,6 +236,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       level->checkCoin(coinEaten);
 
       if (level->isComplete()) {
+        currentPoints += 10 * currentLevel;
         if (currentLevel < Constants::NUMBER_OF_LEVELS) {
           // Go to next level
           gameState = GAME_STATE_NEXTLEVEL;
@@ -298,7 +300,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       winPos.y -= 10;
       DrawStringDecal(winPos, Constants::WIN, olc::RED, {winScale, winScale});
 
-      std::string score = "Your score: " + std::to_string(coinEaten * 10);
+      std::string score = "Your score: " + std::to_string(currentPoints + coinEaten * 10);
       olc::vi2d scorePos = {ScreenWidth() / 2 - GetTextSize(score).x / 2, winPos.y + winSize.y + 10};
       DrawString(scorePos, score, olc::RED);
 
@@ -354,8 +356,8 @@ bool Game::OnUserUpdate(float fElapsedTime) {
           fo.close();
           std::ofstream fout("src/SaveGame/" + LOAD_ITEMS[selectedLoadItem] + ".dat", std::ios::binary);
           fout.write((char*)&currentLevel, sizeof(currentLevel));
-          int score = coinEaten * 10;
-          fout.write((char*)&score, sizeof(score));
+          fout.write((char*)&currentPoints, sizeof(currentPoints));
+          fout.write((char*)&coinEaten, sizeof(coinEaten));
           auto [X, Y] = player->getPosition();
           fout.write((char*)&X, sizeof(X));
           fout.write((char*)&Y, sizeof(Y));
@@ -407,6 +409,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
         } else {
           std::ifstream fin("src/SaveGame/" + LOAD_ITEMS[selectedLoadItem] + ".dat", std::ios::out | std::ios::binary);
           fin.read((char*)&currentLevel, sizeof(currentLevel));
+          fin.read((char*)&currentPoints, sizeof(currentPoints));
           fin.read((char*)&coinEaten, sizeof(coinEaten));
           float X, Y;
           fin.read((char*)&X, sizeof(X));
@@ -535,6 +538,7 @@ bool Game::OnUserDestroy() {
 void Game::newGame() {
   Logging::info("New Game!\n");
   gameState = GAME_STATE_PLAY;
+  currentPoints = 0;
   coinEaten = 0;
   timeAccumulator = 0;
   generateLevel();
