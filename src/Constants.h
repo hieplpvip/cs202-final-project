@@ -17,11 +17,13 @@ namespace Constants {
   const char* LOSE = "You lose!";
   const float LOSE_DURATION = 3.0f;
 
-  const int NUMBER_OF_LEVELS = 10;
+  const int NUMBER_OF_SAVE_SLOTS = 5;
 
   std::vector<std::string> MENU_ITEMS = {"New Game", "Load Game", "Settings", "Exit"};
   std::vector<std::string> SETTING_ITEMS = {"Difficulty: ", "Sound: ", "Back To Menu"};
   std::vector<std::string> PAUSE_ITEMS = {"Continue ", "Save Game", "Back To Menu"};
+
+  const int NUMBER_OF_LEVELS = 10;
   const std::tuple<float, float, int> LEVELS_CONFIG[NUMBER_OF_LEVELS] = {
       // timeBetweenObstacles, obstacleSpeed, numberOfLanes
       {1.50f, 100.0f, 5},
