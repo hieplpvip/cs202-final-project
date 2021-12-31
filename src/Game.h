@@ -39,18 +39,22 @@ private:
     GAME_SAVE
   } gameState;
 
-  int sound = 1;
   float timeAccumulator;
   int selectedMenuItem;
   int selectedSettingItem;
   int selectedPauseItem;
   int selectedLoadItem;
+  int soundEnabled;
+  int currentSound;
   int currentLevel;
   int coinEaten;
 
   Player* player;
   TrafficLight* trafficLight;
   Level* level;
+
+  static int sndIntro;
+  static int sndInGame;
 };
 
 #endif

@@ -7,6 +7,9 @@
 
 olc::PixelGameEngine* pge = nullptr;
 
+int Game::sndIntro = -1;
+int Game::sndInGame = -1;
+
 #define delete_ptr(ptr) \
   if (ptr != nullptr) { \
     delete ptr;         \
@@ -23,7 +26,11 @@ bool Game::OnUserCreate() {
 
   olc::SOUND::InitialiseAudio();
 
-  if (!Bird::loadData() ||
+  sndIntro = olc::SOUND::LoadAudioSample("assets/sound/NFL Theme Song (HQ).wav");
+  sndInGame = olc::SOUND::LoadAudioSample("assets/sound/MC Hammer - U Can't Touch This.wav");
+
+  if (sndIntro == -1 || sndInGame == -1 ||
+      !Bird::loadData() ||
       !Car::loadData() ||
       !Coin::loadData() ||
       !Elephant::loadData() ||
@@ -41,6 +48,8 @@ bool Game::OnUserCreate() {
   selectedMenuItem = 0;
   selectedPauseItem = 0;
   selectedSettingItem = 0;
+  soundEnabled = 1;
+  currentSound = -1;
   currentLevel = 1;
   coinEaten = 0;
 
@@ -71,6 +80,8 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       if (timeAccumulator > Constants::LOADING_DURATION) {
         gameState = GAME_STATE_TITLE;
         timeAccumulator = 0;
+        currentSound = sndIntro;
+        olc::SOUND::PlaySample(currentSound, true);
       }
 
       break;
@@ -94,6 +105,10 @@ bool Game::OnUserUpdate(float fElapsedTime) {
           // New Game
           gameState = GAME_STATE_NEWGAME;
           timeAccumulator = 0;
+          if (currentSound != -1) {
+            olc::SOUND::StopSample(currentSound);
+            currentSound = -1;
+          }
         } else if (selectedMenuItem == 1) {
           // Load Game
           gameState = GAME_STATE_LOADGAME;
@@ -209,6 +224,10 @@ bool Game::OnUserUpdate(float fElapsedTime) {
         Logging::info("Hit obstacle! Game lost\n");
         gameState = GAME_STATE_GAMEOVER;
         timeAccumulator = 0;
+        if (currentSound != -1) {
+          olc::SOUND::StopSample(currentSound);
+          currentSound = -1;
+        }
         return true;
       }
 
@@ -220,6 +239,10 @@ bool Game::OnUserUpdate(float fElapsedTime) {
           // Go to next level
           gameState = GAME_STATE_NEXTLEVEL;
           timeAccumulator = 0;
+          if (currentSound != -1) {
+            olc::SOUND::StopSample(currentSound);
+            currentSound = -1;
+          }
         } else {
           // Win game
           Logging::info("Game won!\n");
@@ -295,6 +318,8 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       if (timeAccumulator > Constants::LOSE_DURATION || GetMouse(0).bPressed || GetKey(olc::SPACE).bPressed) {
         gameState = GAME_STATE_MENU;
         timeAccumulator = 0;
+        currentSound = sndIntro;
+        olc::SOUND::PlaySample(sndIntro, true);
       }
 
       break;
@@ -425,22 +450,22 @@ bool Game::OnUserUpdate(float fElapsedTime) {
         if (selectedSettingItem == 0) {
           // Change Level
           currentLevel += 1;
-          if (currentLevel == 11)
+          if (currentLevel == 11) {
             currentLevel = 1;
+          }
         } else if (selectedSettingItem == 1) {
-          // Change Sound
-          if (sound == 0)
-            sound = 1;
-          else
-            sound = 0;
-          if (sound == 0)
-            PlaySound(NULL, NULL, NULL);
-          else
-            PlaySound(TEXT("MenuSound.wav"), NULL, SND_LOOP | SND_ASYNC);
-
-        } else
+          // Toggle Sound
+          soundEnabled = 1 - soundEnabled;
+          if (currentSound != -1) {
+            if (soundEnabled) {
+              olc::SOUND::PlaySample(currentSound, true);
+            } else {
+              olc::SOUND::StopSample(currentSound);
+            }
+          }
+        } else {
           timeAccumulator = 101;
-
+        }
       } else if (GetKey(olc::DOWN).bPressed) {
         ++selectedSettingItem;
         if (selectedSettingItem >= Constants::SETTING_ITEMS.size()) {
@@ -463,10 +488,11 @@ bool Game::OnUserUpdate(float fElapsedTime) {
         olc::vi2d textSize = (olc::vf2d)(GetTextSize(Constants::SETTING_ITEMS[i])) * textScale;
         olc::vi2d textPos = center - textSize / 2;
         if (i == 1) {
-          if (sound == 0)
+          if (soundEnabled == 0) {
             DrawStringDecal(textPos, Constants::SETTING_ITEMS[i] + "OFF", textColor, {textScale, textScale});
-          else
+          } else {
             DrawStringDecal(textPos, Constants::SETTING_ITEMS[i] + "ON", textColor, {textScale, textScale});
+          }
         } else if (i == 0) {
           DrawStringDecal(textPos, Constants::SETTING_ITEMS[i] + std::to_string(currentLevel), textColor, {textScale, textScale});
         }
@@ -512,6 +538,8 @@ void Game::newGame() {
   coinEaten = 0;
   timeAccumulator = 0;
   generateLevel();
+  currentSound = sndInGame;
+  olc::SOUND::PlaySample(currentSound, true);
 }
 
 void Game::nextLevel() {
@@ -521,6 +549,8 @@ void Game::nextLevel() {
   timeAccumulator = 0;
   ++currentLevel;
   generateLevel();
+  currentSound = sndInGame;
+  olc::SOUND::PlaySample(currentSound, true);
 }
 
 void Game::generateLevel() {
