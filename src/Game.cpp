@@ -95,6 +95,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       DrawStringDecal(titlePos, Constants::TITLE, olc::RED, {titleScale, titleScale});
 
       if (timeAccumulator > Constants::TITLE_DURATION || GetMouse(0).bPressed || GetKey(olc::SPACE).bPressed) {
+        selectedMenuItem = 0;
         gameState = GAME_STATE_MENU;
         timeAccumulator = 0;
       }
@@ -113,11 +114,12 @@ bool Game::OnUserUpdate(float fElapsedTime) {
           }
         } else if (selectedMenuItem == 1) {
           // Load Game
+          selectedLoadItem = 3;
           gameState = GAME_STATE_LOADGAME;
           timeAccumulator = 0;
         } else if (selectedMenuItem == 2) {
           // Settings
-          selectedSettingItem = 0;
+          selectedSettingItem = 2;
           gameState = GAME_STATE_SETTINGS;
           timeAccumulator = 0;
         } else {
@@ -189,6 +191,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
     }
     case GAME_STATE_PLAY: {
       if (GetKey(olc::ESCAPE).bPressed) {
+        selectedPauseItem = 0;
         gameState = GAME_STATE_PAUSE;
         timeAccumulator = 0;
         return true;
@@ -263,10 +266,11 @@ bool Game::OnUserUpdate(float fElapsedTime) {
           // Continue
           gameState = GAME_STATE_PLAY;
         } else if (selectedPauseItem == 1) {
-          // Back to menu
+          // Save Game
           selectedLoadItem = 0;
           gameState = GAME_SAVE;
         } else {
+          // Back to menu
           gameState = GAME_STATE_MENU;
         }
       } else if (GetKey(olc::DOWN).bPressed) {
@@ -306,6 +310,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       DrawString(scorePos, score, olc::RED);
 
       if (timeAccumulator > Constants::WIN_DURATION || GetMouse(0).bPressed || GetKey(olc::SPACE).bPressed) {
+        selectedMenuItem = 0;
         gameState = GAME_STATE_MENU;
         timeAccumulator = 0;
       }
@@ -319,6 +324,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       DrawStringDecal(losePos, Constants::LOSE, olc::RED, {loseScale, loseScale});
 
       if (timeAccumulator > Constants::LOSE_DURATION || GetMouse(0).bPressed || GetKey(olc::SPACE).bPressed) {
+        selectedMenuItem = 0;
         gameState = GAME_STATE_MENU;
         timeAccumulator = 0;
         currentSound = sndIntro;
@@ -442,7 +448,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
         DrawStringDecal(textPos, LOAD_ITEMS[i], textColor, {textScale, textScale});
       }
 
-      if (timeAccumulator > 101) {
+      if (timeAccumulator > 100) {
         gameState = GAME_STATE_MENU;
         timeAccumulator = 0;
       }
@@ -452,10 +458,10 @@ bool Game::OnUserUpdate(float fElapsedTime) {
     case GAME_STATE_SETTINGS: {
       if (GetKey(olc::ENTER).bPressed) {
         if (selectedSettingItem == 0) {
-          // Change Level
-          currentLevel += 1;
-          if (currentLevel == 11) {
-            currentLevel = 1;
+          // Change Difficulty
+          difficulty += 1;
+          if (difficulty == 4) {
+            difficulty = 1;
           }
         } else if (selectedSettingItem == 1) {
           // Toggle Sound
@@ -485,24 +491,21 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       int height = GetTextSize(Constants::SETTING_ITEMS[0]).y * 2;
       int offset = (ScreenHeight() - height * (int)Constants::SETTING_ITEMS.size()) / 2;
       for (int i = 0; i < (int)Constants::SETTING_ITEMS.size(); ++i) {
-        float textScale = (i == selectedSettingItem) ? 1.5f : 1.2f;
+        std::string text = Constants::SETTING_ITEMS[i];
+        if (i == 1) {
+          text += (soundEnabled) ? "ON" : "OFF";
+        } else if (i == 0) {
+          text += (difficulty == 1) ? "Easy" : ((difficulty == 2) ? "Medium" : "Hard");
+        }
+
+        float textScale = (i == selectedSettingItem) ? 1.3f : 1.0f;
         olc::Pixel textColor = (i == selectedSettingItem) ? olc::YELLOW : olc::WHITE;
 
         olc::vi2d center = {ScreenWidth() / 2, offset + height * (2 * i + 1) / 2};
-        olc::vi2d textSize = (olc::vf2d)(GetTextSize(Constants::SETTING_ITEMS[i])) * textScale;
+        olc::vi2d textSize = (olc::vf2d)(GetTextSize(text)) * textScale;
         olc::vi2d textPos = center - textSize / 2;
-        if (i == 1) {
-          if (soundEnabled == 0) {
-            DrawStringDecal(textPos, Constants::SETTING_ITEMS[i] + "OFF", textColor, {textScale, textScale});
-          } else {
-            DrawStringDecal(textPos, Constants::SETTING_ITEMS[i] + "ON", textColor, {textScale, textScale});
-          }
-        } else if (i == 0) {
-          DrawStringDecal(textPos, Constants::SETTING_ITEMS[i] + std::to_string(currentLevel), textColor, {textScale, textScale});
-        }
-        DrawStringDecal(textPos, Constants::SETTING_ITEMS[i], textColor, {textScale, textScale});
+        DrawStringDecal(textPos, text, textColor, {textScale, textScale});
       }
-      // DrawString(0, 0, "Work in progress", olc::RED);
 
       if (timeAccumulator > 100) {
         gameState = GAME_STATE_MENU;
