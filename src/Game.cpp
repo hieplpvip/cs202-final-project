@@ -147,6 +147,29 @@ bool Game::OnUserUpdate(float fElapsedTime) {
 
       break;
     }
+    case GAME_STATE_NEXTLEVEL: {
+      {
+        float scale = 1.0f;
+        std::string s = "You passed Level " + std::to_string(currentLevel);
+        olc::vi2d size = (olc::vf2d)(GetTextSize(s)) * scale;
+        olc::vi2d pos = ScreenSize() / 2 - size / 2;
+        DrawStringDecal(pos, s, olc::RED, {scale, scale});
+      }
+      {
+        float scale = 1.0f;
+        std::string s = "Prepare for Level " + std::to_string(currentLevel + 1) + "...";
+        olc::vi2d size = (olc::vf2d)(GetTextSize(s)) * scale;
+        olc::vi2d pos = ScreenSize() / 2 - size / 2;
+        pos.y += size.y + 10;
+        DrawStringDecal(pos, s, olc::RED, {scale, scale});
+      }
+
+      if (timeAccumulator > 3.0f || GetMouse(0).bPressed || GetKey(olc::SPACE).bPressed) {
+        nextLevel();
+      }
+
+      break;
+    }
     case GAME_STATE_PLAY: {
       if (GetKey(olc::ESCAPE).bPressed) {
         gameState = GAME_STATE_PAUSE;
@@ -195,8 +218,8 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       if (level->isComplete()) {
         if (currentLevel < Constants::NUMBER_OF_LEVELS) {
           // Go to next level
-          Logging::info("Level %d completed. Go to next level!\n", currentLevel);
-          nextLevel();
+          gameState = GAME_STATE_NEXTLEVEL;
+          timeAccumulator = 0;
         } else {
           // Win game
           Logging::info("Game won!\n");
@@ -493,6 +516,9 @@ void Game::newGame() {
 
 void Game::nextLevel() {
   assert(currentLevel < Constants::NUMBER_OF_LEVELS);
+  Logging::info("Level %d completed. Go to next level!\n", currentLevel);
+  gameState = GAME_STATE_PLAY;
+  timeAccumulator = 0;
   ++currentLevel;
   generateLevel();
 }
