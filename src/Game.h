@@ -23,7 +23,6 @@ public:
   void generateLevel();
   void gotoxy(int x, int y);
   void load();
-  void loading();
 
 private:
   enum {

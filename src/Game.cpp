@@ -25,42 +25,6 @@ void Game::gotoxy(int x, int y) {
   SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), d);
 }
 
-void Game::load() {
-  float progress = 0.0;
-
-  while (progress < 1.0) {
-    int barWidth = 70;
-    int pos = (int)(barWidth * progress);
-    gotoxy(25, 16);
-
-    Sleep(50);
-
-    std::cout << "[";
-    for (int i = 0; i < barWidth; i++) {
-      if (i < pos) {
-        std::cout << "=";
-      } else if (i == pos) {
-        std::cout << ">";
-      } else {
-        std::cout << " ";
-      }
-    }
-    std::cout << "]" << int(progress * 100.0) << " %\r";
-    std::cout.flush();
-
-    progress += 0.01f;
-  }
-  std::cout << std::endl;
-}
-
-void Game::loading() {
-  PlaySound(TEXT("MenuSound.wav"), NULL, SND_LOOP | SND_ASYNC);
-  gotoxy(55, 14);
-  std::cout << "Loading..." << std::endl;
-  // gotoxy(10, 16);
-  load();
-}
-
 bool Game::OnUserCreate() {
   Logging::debug("[Game::OnUserCreate] Initializing game engine\n");
 
@@ -79,7 +43,7 @@ bool Game::OnUserCreate() {
     return false;
   }
 
-  gameState = GAME_STATE_TITLE;
+  gameState = GAME_STATE_LOADING;
   timeAccumulator = 0;
   selectedMenuItem = 0;
   selectedPauseItem = 0;
@@ -99,6 +63,25 @@ bool Game::OnUserUpdate(float fElapsedTime) {
   timeAccumulator += fElapsedTime;
 
   switch (gameState) {
+    case GAME_STATE_LOADING: {
+      float loadingScale = 1.5f;
+      olc::vi2d loadingSize = (olc::vf2d)(GetTextSize(Constants::LOADING)) * loadingScale;
+      olc::vi2d loadingPos = ScreenSize() / 2 - loadingSize / 2;
+      DrawStringDecal(loadingPos, Constants::LOADING, olc::WHITE, {loadingScale, loadingScale});
+
+      olc::vi2d progressBarSize = {150, 10};
+      olc::vi2d progressBarPos = ScreenSize() / 2 - progressBarSize / 2;
+      progressBarPos.y += loadingSize.y + 10;
+      FillRect(progressBarPos, {(int)(150.0f * timeAccumulator / Constants::LOADING_DURATION), 10}, olc::RED);
+      DrawRect(progressBarPos, progressBarSize, olc::WHITE);
+
+      if (timeAccumulator > Constants::LOADING_DURATION) {
+        gameState = GAME_STATE_TITLE;
+        timeAccumulator = 0;
+      }
+
+      break;
+    }
     case GAME_STATE_TITLE: {
       float titleScale = 1.5f;
       olc::vi2d titleSize = (olc::vf2d)(GetTextSize(Constants::TITLE)) * titleScale;
@@ -157,10 +140,6 @@ bool Game::OnUserUpdate(float fElapsedTime) {
         DrawStringDecal(textPos, Constants::MENU_ITEMS[i], textColor, {textScale, textScale});
       }
 
-      break;
-    }
-    case GAME_STATE_LOADING: {
-      // TODO: Initialize level here
       break;
     }
     case GAME_STATE_PLAY: {
