@@ -20,7 +20,7 @@ namespace Constants {
   const int NUMBER_OF_LEVELS = 10;
 
   std::vector<std::string> MENU_ITEMS = {"New Game", "Load Game", "Settings", "Exit"};
-  std::vector<std::string> SETTING_ITEMS = {"Level: ", "Sound: ", "Back To Menu"};
+  std::vector<std::string> SETTING_ITEMS = {"Difficulty: ", "Sound: ", "Back To Menu"};
   std::vector<std::string> PAUSE_ITEMS = {"Continue ", "Save Game", "Back To Menu"};
   const std::tuple<float, float, int> LEVELS_CONFIG[NUMBER_OF_LEVELS] = {
       // timeBetweenObstacles, obstacleSpeed, numberOfLanes
