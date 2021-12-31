@@ -21,14 +21,15 @@ public:
   void newGame();
   void nextLevel();
   void generateLevel();
-  void gotoxy(int x, int y);
   void load();
 
 private:
   enum {
+    GAME_STATE_LOADING,
     GAME_STATE_TITLE,
     GAME_STATE_MENU,
-    GAME_STATE_LOADING,
+    GAME_STATE_NEWGAME,
+    GAME_STATE_NEXTLEVEL,
     GAME_STATE_PLAY,
     GAME_STATE_WIN,
     GAME_STATE_GAMEOVER,

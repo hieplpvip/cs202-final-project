@@ -18,13 +18,6 @@ Game::Game() {
   sAppName = "Crossing Road";
 }
 
-void Game::gotoxy(int x, int y) {
-  COORD d;
-  d.X = x;
-  d.Y = y;
-  SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), d);
-}
-
 bool Game::OnUserCreate() {
   Logging::debug("[Game::OnUserCreate] Initializing game engine\n");
 
@@ -48,7 +41,7 @@ bool Game::OnUserCreate() {
   selectedMenuItem = 0;
   selectedPauseItem = 0;
   selectedSettingItem = 0;
-  currentLevel = 10;
+  currentLevel = 1;
   coinEaten = 0;
 
   player = new Player();
@@ -99,9 +92,8 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       if (GetKey(olc::ENTER).bPressed) {
         if (selectedMenuItem == 0) {
           // New Game
-          Logging::info("New game!\n");
-          newGame();
-          return true;
+          gameState = GAME_STATE_NEWGAME;
+          timeAccumulator = 0;
         } else if (selectedMenuItem == 1) {
           // Load Game
           gameState = GAME_STATE_LOADGAME;
@@ -138,6 +130,19 @@ bool Game::OnUserUpdate(float fElapsedTime) {
         olc::vi2d textSize = (olc::vf2d)(GetTextSize(Constants::MENU_ITEMS[i])) * textScale;
         olc::vi2d textPos = center - textSize / 2;
         DrawStringDecal(textPos, Constants::MENU_ITEMS[i], textColor, {textScale, textScale});
+      }
+
+      break;
+    }
+    case GAME_STATE_NEWGAME: {
+      float scale = 1.0f;
+      std::string s = "Prepare for Level 1...";
+      olc::vi2d size = (olc::vf2d)(GetTextSize(s)) * scale;
+      olc::vi2d pos = ScreenSize() / 2 - size / 2;
+      DrawStringDecal(pos, s, olc::RED, {scale, scale});
+
+      if (timeAccumulator > 3.0f || GetMouse(0).bPressed || GetKey(olc::SPACE).bPressed) {
+        newGame();
       }
 
       break;
@@ -479,6 +484,7 @@ bool Game::OnUserDestroy() {
 }
 
 void Game::newGame() {
+  Logging::info("New Game!\n");
   gameState = GAME_STATE_PLAY;
   coinEaten = 0;
   timeAccumulator = 0;
