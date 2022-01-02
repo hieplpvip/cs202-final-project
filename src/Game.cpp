@@ -1,5 +1,6 @@
 #include "Game.h"
 #include <cassert>
+#include <chrono>
 #include <cstring>
 #include <iostream>
 #include "Constants.h"
@@ -568,6 +569,6 @@ void Game::generateLevel() {
     timeBetweenObstacles *= 0.6f;
     obstacleSpeed *= 1.5f;
   }
-  level = new Level(timeBetweenObstacles, obstacleSpeed, numberOfLanes, player, currentLevel);
+  level = new Level(timeBetweenObstacles, obstacleSpeed, numberOfLanes, player, std::chrono::steady_clock::now().time_since_epoch().count());
   trafficLight->reset();
 }

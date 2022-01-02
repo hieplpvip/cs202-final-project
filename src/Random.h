@@ -82,6 +82,11 @@ public:
     seed = _seed;
   }
 
+  /* Gets current seed */
+  long long getSeed() {
+    return (seed ^ multiplier) & mask;
+  }
+
   /* Random value in range [0, n-1]. */
   int next(int n) {
     if (n <= 0)
