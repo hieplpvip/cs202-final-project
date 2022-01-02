@@ -62,5 +62,33 @@ void Player::moveRight(float fElapsedTime) {
 }
 
 void Player::draw() {
-  pge->DrawPartialDecal(pos, decPlayer, olc::vf2d(4, 0) * vBlockSize, vBlockSize, {0.5f, 0.5f});
+  int dx = 0, dy = 0;
+  if (pge->GetKey(olc::LEFT).bHeld) --dx;
+  if (pge->GetKey(olc::RIGHT).bHeld) ++dx;
+  if (pge->GetKey(olc::UP).bHeld) --dy;
+  if (pge->GetKey(olc::DOWN).bHeld) ++dy;
+  if (dy == -1) {
+    if (dx == -1) {
+      prevSprite = {1, 0};
+    } else if (dx == 0) {
+      prevSprite = {4, 0};
+    } else {
+      prevSprite = {7, 0};
+    }
+  } else if (dy == +1) {
+    if (dx == -1) {
+      prevSprite = {1, 4};
+    } else if (dx == 0) {
+      prevSprite = {4, 4};
+    } else {
+      prevSprite = {7, 4};
+    }
+  } else {
+    if (dx == -1) {
+      prevSprite = {2, 2};
+    } else if (dx == +1) {
+      prevSprite = {7, 2};
+    }
+  }
+  pge->DrawPartialDecal(pos, decPlayer, prevSprite * vBlockSize, vBlockSize, {0.5f, 0.5f});
 }
