@@ -18,6 +18,7 @@ public:
   void draw();
 
 private:
+  olc::vi2d prevSprite = {4, 0};
   olc::vi2d vBlockSize = {32, 48};
 
   static olc::Sprite *sprPlayer;
