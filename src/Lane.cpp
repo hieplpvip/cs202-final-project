@@ -14,7 +14,7 @@ void Lane::unloadData() {
   }
 }
 
-Lane::Lane(olc::vf2d pos, int direction, float timeBetweenObstacles, float obstacleSpeed, int seed) {
+Lane::Lane(olc::vf2d pos, int direction, float timeBetweenObstacles, float obstacleSpeed, long long seed) {
   this->pos = pos;
   this->direction = direction;
   this->timeBetweenObstacles = timeBetweenObstacles;

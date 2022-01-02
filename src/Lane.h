@@ -17,7 +17,7 @@ extern olc::PixelGameEngine* pge;
 
 class Lane {
 public:
-  Lane(olc::vf2d pos, int direction, float timeBetweenObstacles, float obstacleSpeed, int seed);
+  Lane(olc::vf2d pos, int direction, float timeBetweenObstacles, float obstacleSpeed, long long seed);
   ~Lane();
 
   static bool loadData();
