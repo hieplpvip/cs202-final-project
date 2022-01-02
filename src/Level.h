@@ -11,7 +11,7 @@ extern olc::PixelGameEngine* pge;
 
 class Level {
 public:
-  Level(float timeBetweenObstacles, float obstacleSpeed, int numberOfLanes, Player* player, int seed);
+  Level(float timeBetweenObstacles, float obstacleSpeed, int numberOfLanes, Player* player, long long seed);
   ~Level();
 
   static bool loadData();

@@ -14,7 +14,7 @@ void Level::unloadData() {
   }
 }
 
-Level::Level(float timeBetweenObstacles, float obstacleSpeed, int numberOfLanes, Player* player, int seed) {
+Level::Level(float timeBetweenObstacles, float obstacleSpeed, int numberOfLanes, Player* player, long long seed) {
   this->timeBetweenObstacles = timeBetweenObstacles;
   this->obstacleSpeed = obstacleSpeed;
   this->numberOfLanes = numberOfLanes;
