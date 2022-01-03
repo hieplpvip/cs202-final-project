@@ -226,8 +226,8 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       trafficLight->draw();
       player->draw();
 
-      DrawString(10, 10, "Level: " + std::to_string(currentLevel), olc::RED);
-      DrawString(10, 20, "Score: " + std::to_string(currentPoints + coinEaten * 10), olc::RED);
+      DrawString(10, 10, "Level: " + std::to_string(currentLevel), olc::WHITE);
+      DrawString(10, 20, "Score: " + std::to_string(currentPoints + coinEaten * 10), olc::WHITE);
 
       if (level->checkCollision()) {
         Logging::info("Hit obstacle! Game lost\n");
