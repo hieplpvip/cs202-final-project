@@ -90,14 +90,14 @@ void Lane::drawBackground() {
 }
 
 void Lane::drawObjects() {
-  // Draw the obstacles
-  for (auto& obstacle : obstacles) {
-    obstacle->draw();
-  }
-
   // Draw the coin (if not eaten yet)
   if (coin != nullptr) {
     coin->draw();
+  }
+
+  // Draw the obstacles
+  for (auto& obstacle : obstacles) {
+    obstacle->draw();
   }
 }
 
