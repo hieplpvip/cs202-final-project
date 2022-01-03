@@ -79,7 +79,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
 
       olc::vi2d progressBarSize = {150, 10};
       olc::vi2d progressBarPos = ScreenSize() / 2 - progressBarSize / 2;
-      progressBarPos.y += loadingSize.y + 10;
+      progressBarPos.y += loadingSize.y + 5;
       FillRect(progressBarPos, {(int)(150.0f * timeAccumulator / Constants::LOADING_DURATION), 10}, olc::RED);
       DrawRect(progressBarPos, progressBarSize, olc::WHITE);
 
@@ -158,11 +158,11 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       break;
     }
     case GAME_STATE_NEWGAME: {
-      float scale = 1.0f;
+      float scale = 0.1f;
       std::string s = "Prepare for Level 1...";
-      olc::vi2d size = (olc::vf2d)(GetTextSize(s)) * scale;
+      olc::vi2d size = (olc::vf2d)(erasFont->GetTextSizeProp(s)) * scale;
       olc::vi2d pos = ScreenSize() / 2 - size / 2;
-      DrawStringDecal(pos, s, olc::RED, {scale, scale});
+      erasFont->DrawStringPropDecal(pos, s, olc::RED, {scale, scale});
 
       if (timeAccumulator > 3.0f || GetMouse(0).bPressed || GetKey(olc::SPACE).bPressed) {
         newGame();
@@ -172,19 +172,19 @@ bool Game::OnUserUpdate(float fElapsedTime) {
     }
     case GAME_STATE_NEXTLEVEL: {
       {
-        float scale = 1.0f;
-        std::string s = "You passed Level " + std::to_string(currentLevel);
-        olc::vi2d size = (olc::vf2d)(GetTextSize(s)) * scale;
+        float scale = 0.1f;
+        std::string s = "You passed Level " + std::to_string(currentLevel) + "!";
+        olc::vi2d size = (olc::vf2d)(erasFont->GetTextSizeProp(s)) * scale;
         olc::vi2d pos = ScreenSize() / 2 - size / 2;
-        DrawStringDecal(pos, s, olc::RED, {scale, scale});
+        erasFont->DrawStringPropDecal(pos, s, olc::RED, {scale, scale});
       }
       {
-        float scale = 1.0f;
+        float scale = 0.1f;
         std::string s = "Prepare for Level " + std::to_string(currentLevel + 1) + "...";
-        olc::vi2d size = (olc::vf2d)(GetTextSize(s)) * scale;
+        olc::vi2d size = (olc::vf2d)(erasFont->GetTextSizeProp(s)) * scale;
         olc::vi2d pos = ScreenSize() / 2 - size / 2;
-        pos.y += size.y + 10;
-        DrawStringDecal(pos, s, olc::RED, {scale, scale});
+        pos.y += size.y + 5;
+        erasFont->DrawStringPropDecal(pos, s, olc::RED, {scale, scale});
       }
 
       if (timeAccumulator > 3.0f || GetMouse(0).bPressed || GetKey(olc::SPACE).bPressed) {
@@ -303,15 +303,17 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       break;
     }
     case GAME_STATE_WIN: {
-      float winScale = 2.5f;
-      olc::vi2d winSize = (olc::vf2d)(GetTextSize(Constants::WIN)) * winScale;
+      float winScale = 0.25f;
+      olc::vi2d winSize = (olc::vf2d)(erasFont->GetTextSizeProp(Constants::WIN)) * winScale;
       olc::vi2d winPos = ScreenSize() / 2 - winSize / 2;
       winPos.y -= 10;
-      DrawStringDecal(winPos, Constants::WIN, olc::RED, {winScale, winScale});
+      erasFont->DrawStringPropDecal(winPos, Constants::WIN, olc::RED, {winScale, winScale});
 
+      float scoreScale = 0.1f;
       std::string score = "Your score: " + std::to_string(currentPoints + coinEaten * 10);
-      olc::vi2d scorePos = {ScreenWidth() / 2 - GetTextSize(score).x / 2, winPos.y + winSize.y + 10};
-      DrawString(scorePos, score, olc::RED);
+      olc::vi2d scoreSize = (olc::vf2d)(erasFont->GetTextSizeProp(score)) * scoreScale;
+      olc::vi2d scorePos = {ScreenWidth() / 2 - scoreSize.x / 2, winPos.y + winSize.y + 5};
+      erasFont->DrawStringPropDecal(scorePos, score, olc::RED, {scoreScale, scoreScale});
 
       if (timeAccumulator > Constants::WIN_DURATION || GetMouse(0).bPressed || GetKey(olc::SPACE).bPressed) {
         selectedMenuItem = 0;
@@ -322,10 +324,10 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       break;
     }
     case GAME_STATE_GAMEOVER: {
-      float loseScale = 2.5f;
-      olc::vi2d loseSize = (olc::vf2d)(GetTextSize(Constants::LOSE)) * loseScale;
+      float loseScale = 0.25f;
+      olc::vi2d loseSize = (olc::vf2d)(erasFont->GetTextSizeProp(Constants::LOSE)) * loseScale;
       olc::vi2d losePos = ScreenSize() / 2 - loseSize / 2;
-      DrawStringDecal(losePos, Constants::LOSE, olc::RED, {loseScale, loseScale});
+      erasFont->DrawStringPropDecal(losePos, Constants::LOSE, olc::RED, {loseScale, loseScale});
 
       if (timeAccumulator > Constants::LOSE_DURATION || GetMouse(0).bPressed || GetKey(olc::SPACE).bPressed) {
         selectedMenuItem = 0;
