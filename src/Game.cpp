@@ -11,6 +11,7 @@ olc::PixelGameEngine* pge = nullptr;
 
 int Game::sndIntro = -1;
 int Game::sndInGame = -1;
+olc::Font* Game::erasFont = nullptr;
 
 #define delete_ptr(ptr) \
   if (ptr != nullptr) { \
@@ -30,6 +31,7 @@ bool Game::OnUserCreate() {
 
   sndIntro = olc::SOUND::LoadAudioSample("assets/sound/NFL Theme Song (HQ).wav");
   sndInGame = olc::SOUND::LoadAudioSample("assets/sound/MC Hammer - U Can't Touch This.wav");
+  erasFont = new olc::Font("assets/fonts/eras.png");
 
   if (sndIntro == -1 || sndInGame == -1 ||
       !Bird::loadData() ||
@@ -70,10 +72,10 @@ bool Game::OnUserUpdate(float fElapsedTime) {
 
   switch (gameState) {
     case GAME_STATE_LOADING: {
-      float loadingScale = 1.5f;
-      olc::vi2d loadingSize = (olc::vf2d)(GetTextSize(Constants::LOADING)) * loadingScale;
+      float loadingScale = 0.1f;
+      olc::vi2d loadingSize = (olc::vf2d)(erasFont->GetTextSizeProp(Constants::LOADING)) * loadingScale;
       olc::vi2d loadingPos = ScreenSize() / 2 - loadingSize / 2;
-      DrawStringDecal(loadingPos, Constants::LOADING, olc::WHITE, {loadingScale, loadingScale});
+      erasFont->DrawStringPropDecal(loadingPos, Constants::LOADING, olc::WHITE, {loadingScale, loadingScale});
 
       olc::vi2d progressBarSize = {150, 10};
       olc::vi2d progressBarPos = ScreenSize() / 2 - progressBarSize / 2;
@@ -91,10 +93,10 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       break;
     }
     case GAME_STATE_TITLE: {
-      float titleScale = 1.5f;
-      olc::vi2d titleSize = (olc::vf2d)(GetTextSize(Constants::TITLE)) * titleScale;
+      float titleScale = 0.15f;
+      olc::vi2d titleSize = (olc::vf2d)(erasFont->GetTextSizeProp(Constants::TITLE)) * titleScale;
       olc::vi2d titlePos = ScreenSize() / 2 - titleSize / 2;
-      DrawStringDecal(titlePos, Constants::TITLE, olc::RED, {titleScale, titleScale});
+      erasFont->DrawStringPropDecal(titlePos, Constants::TITLE, olc::RED, {titleScale, titleScale});
 
       if (timeAccumulator > Constants::TITLE_DURATION || GetMouse(0).bPressed || GetKey(olc::SPACE).bPressed) {
         selectedMenuItem = 0;
@@ -141,16 +143,16 @@ bool Game::OnUserUpdate(float fElapsedTime) {
         }
       }
 
-      int height = GetTextSize(Constants::MENU_ITEMS[0]).y * 2;
+      int height = (int)(erasFont->GetTextSizeProp(Constants::MENU_ITEMS[0]).y * 0.12f);
       int offset = (ScreenHeight() - height * (int)Constants::MENU_ITEMS.size()) / 2;
       for (int i = 0; i < (int)Constants::MENU_ITEMS.size(); ++i) {
-        float textScale = (i == selectedMenuItem) ? 1.5f : 1.2f;
+        float textScale = (i == selectedMenuItem) ? 0.12f : 0.1f;
         olc::Pixel textColor = (i == selectedMenuItem) ? olc::YELLOW : olc::WHITE;
 
         olc::vi2d center = {ScreenWidth() / 2, offset + height * (2 * i + 1) / 2};
-        olc::vi2d textSize = (olc::vf2d)(GetTextSize(Constants::MENU_ITEMS[i])) * textScale;
+        olc::vi2d textSize = (olc::vf2d)(erasFont->GetTextSizeProp(Constants::MENU_ITEMS[i])) * textScale;
         olc::vi2d textPos = center - textSize / 2;
-        DrawStringDecal(textPos, Constants::MENU_ITEMS[i], textColor, {textScale, textScale});
+        erasFont->DrawStringPropDecal(textPos, Constants::MENU_ITEMS[i], textColor, {textScale, textScale});
       }
 
       break;
@@ -287,16 +289,16 @@ bool Game::OnUserUpdate(float fElapsedTime) {
         }
       }
 
-      int height = GetTextSize(Constants::PAUSE_ITEMS[0]).y * 2;
+      int height = (int)(erasFont->GetTextSizeProp(Constants::PAUSE_ITEMS[0]).y * 0.12f);
       int offset = (ScreenHeight() - height * (int)Constants::PAUSE_ITEMS.size()) / 2;
       for (int i = 0; i < (int)Constants::PAUSE_ITEMS.size(); ++i) {
-        float textScale = (i == selectedPauseItem) ? 1.5f : 1.2f;
+        float textScale = (i == selectedPauseItem) ? 0.12f : 0.1f;
         olc::Pixel textColor = (i == selectedPauseItem) ? olc::YELLOW : olc::WHITE;
 
         olc::vi2d center = {ScreenWidth() / 2, offset + height * (2 * i + 1) / 2};
-        olc::vi2d textSize = (olc::vf2d)(GetTextSize(Constants::PAUSE_ITEMS[i])) * textScale;
+        olc::vi2d textSize = (olc::vf2d)(erasFont->GetTextSizeProp(Constants::PAUSE_ITEMS[i])) * textScale;
         olc::vi2d textPos = center - textSize / 2;
-        DrawStringDecal(textPos, Constants::PAUSE_ITEMS[i], textColor, {textScale, textScale});
+        erasFont->DrawStringPropDecal(textPos, Constants::PAUSE_ITEMS[i], textColor, {textScale, textScale});
       }
       break;
     }
@@ -374,16 +376,16 @@ bool Game::OnUserUpdate(float fElapsedTime) {
         }
       }
 
-      int height = GetTextSize(ITEMS[0]).y * 2;
+      int height = (int)(erasFont->GetTextSizeProp(ITEMS[0]).y * 0.12f);
       int offset = (ScreenHeight() - height * (int)ITEMS.size()) / 2;
       for (int i = 0; i < (int)ITEMS.size(); ++i) {
-        float textScale = (i == selectedLoadItem) ? 1.5f : 1.2f;
+        float textScale = (i == selectedLoadItem) ? 0.12f : 0.1f;
         olc::Pixel textColor = (i == selectedLoadItem) ? olc::YELLOW : olc::WHITE;
 
         olc::vi2d center = {ScreenWidth() / 2, offset + height * (2 * i + 1) / 2};
-        olc::vi2d textSize = (olc::vf2d)(GetTextSize(ITEMS[i])) * textScale;
+        olc::vi2d textSize = (olc::vf2d)(erasFont->GetTextSizeProp(ITEMS[i])) * textScale;
         olc::vi2d textPos = center - textSize / 2;
-        DrawStringDecal(textPos, ITEMS[i], textColor, {textScale, textScale});
+        erasFont->DrawStringPropDecal(textPos, ITEMS[i], textColor, {textScale, textScale});
       }
 
       break;
@@ -432,16 +434,16 @@ bool Game::OnUserUpdate(float fElapsedTime) {
         }
       }
 
-      int height = GetTextSize(ITEMS[0]).y * 2;
+      int height = (int)(erasFont->GetTextSizeProp(ITEMS[0]).y * 0.12f);
       int offset = (ScreenHeight() - height * (int)ITEMS.size()) / 2;
       for (int i = 0; i < (int)ITEMS.size(); ++i) {
-        float textScale = (i == selectedLoadItem) ? 1.5f : 1.2f;
+        float textScale = (i == selectedLoadItem) ? 0.12f : 0.1f;
         olc::Pixel textColor = (i == selectedLoadItem) ? olc::YELLOW : olc::WHITE;
 
         olc::vi2d center = {ScreenWidth() / 2, offset + height * (2 * i + 1) / 2};
-        olc::vi2d textSize = (olc::vf2d)(GetTextSize(ITEMS[i])) * textScale;
+        olc::vi2d textSize = (olc::vf2d)(erasFont->GetTextSizeProp(ITEMS[i])) * textScale;
         olc::vi2d textPos = center - textSize / 2;
-        DrawStringDecal(textPos, ITEMS[i], textColor, {textScale, textScale});
+        erasFont->DrawStringPropDecal(textPos, ITEMS[i], textColor, {textScale, textScale});
       }
 
       if (timeAccumulator > 100) {
@@ -484,7 +486,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
         }
       }
 
-      int height = GetTextSize(Constants::SETTING_ITEMS[0]).y * 2;
+      int height = (int)(erasFont->GetTextSizeProp(Constants::SETTING_ITEMS[0]).y * 0.12f);
       int offset = (ScreenHeight() - height * (int)Constants::SETTING_ITEMS.size()) / 2;
       for (int i = 0; i < (int)Constants::SETTING_ITEMS.size(); ++i) {
         std::string text = Constants::SETTING_ITEMS[i];
@@ -494,13 +496,13 @@ bool Game::OnUserUpdate(float fElapsedTime) {
           text += (difficulty == 1) ? "Easy" : ((difficulty == 2) ? "Medium" : "Hard");
         }
 
-        float textScale = (i == selectedSettingItem) ? 1.3f : 1.0f;
+        float textScale = (i == selectedSettingItem) ? 0.12f : 0.1f;
         olc::Pixel textColor = (i == selectedSettingItem) ? olc::YELLOW : olc::WHITE;
 
         olc::vi2d center = {ScreenWidth() / 2, offset + height * (2 * i + 1) / 2};
-        olc::vi2d textSize = (olc::vf2d)(GetTextSize(text)) * textScale;
+        olc::vi2d textSize = (olc::vf2d)(erasFont->GetTextSizeProp(text)) * textScale;
         olc::vi2d textPos = center - textSize / 2;
-        DrawStringDecal(textPos, text, textColor, {textScale, textScale});
+        erasFont->DrawStringPropDecal(textPos, text, textColor, {textScale, textScale});
       }
 
       if (timeAccumulator > 100) {
