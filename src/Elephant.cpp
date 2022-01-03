@@ -1,3 +1,4 @@
+
 #include "Elephant.h"
 
 olc::Sprite *Elephant::sprLeft = nullptr;

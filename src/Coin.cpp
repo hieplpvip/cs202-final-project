@@ -7,7 +7,8 @@ Coin::Coin() {
 }
 
 bool Coin::loadData() {
-  spr = new olc::Sprite("assets/graphics/Coin S.png");
+  //spr = new olc::Sprite("assets/graphics/Coin S (2) .png");
+  spr = new olc::Sprite("assets/graphics/Coin S (2) copy.png");
   return spr != nullptr;
 }
 
