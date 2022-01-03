@@ -33,6 +33,7 @@ private:
     GAME_STATE_NEXTLEVEL,
     GAME_STATE_PLAY,
     GAME_STATE_WIN,
+    GAME_STATE_HIT,
     GAME_STATE_GAMEOVER,
     GAME_STATE_SAVEGAME,
     GAME_STATE_LOADGAME,
@@ -48,6 +49,7 @@ private:
   int difficulty;
   int soundEnabled;
   int currentSound;
+  int currentLives;
   int currentLevel;
   int currentPoints;
   int coinEaten;

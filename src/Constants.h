@@ -14,6 +14,9 @@ namespace Constants {
   const char* WIN = "You win!";
   const float WIN_DURATION = 3.0f;
 
+  const char* HIT = "Oops! You hit an obstacle!";
+  const float HIT_DURATION = 3.0f;
+
   const char* LOSE = "You lose!";
   const float LOSE_DURATION = 3.0f;
 

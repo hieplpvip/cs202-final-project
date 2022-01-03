@@ -55,6 +55,7 @@ bool Game::OnUserCreate() {
   difficulty = 1;
   soundEnabled = 1;
   currentSound = -1;
+  currentLives = 3;
   currentLevel = 1;
   currentPoints = 0;
   coinEaten = 0;
@@ -226,12 +227,20 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       trafficLight->draw();
       player->draw();
 
-      DrawString(10, 10, "Level: " + std::to_string(currentLevel), olc::WHITE);
-      DrawString(10, 20, "Score: " + std::to_string(currentPoints + coinEaten * 10), olc::WHITE);
+      DrawString(10, 5, "Level: " + std::to_string(currentLevel), olc::WHITE);
+      DrawString(10, 15, "Score: " + std::to_string(currentPoints + coinEaten * 10), olc::WHITE);
+      DrawString(10, 25, "Lives: " + std::to_string(currentLives), olc::WHITE);
 
       if (level->checkCollision()) {
-        Logging::info("Hit obstacle! Game lost\n");
-        gameState = GAME_STATE_GAMEOVER;
+        Logging::info("Hit obstacle! ");
+        if (currentLives == 1) {
+          Logging::info("Game lost!\n");
+          gameState = GAME_STATE_GAMEOVER;
+        } else {
+          Logging::info("Let's try again!\n");
+          gameState = GAME_STATE_HIT;
+          --currentLives;
+        }
         timeAccumulator = 0;
         if (currentSound != -1) {
           olc::SOUND::StopSample(currentSound);
@@ -245,6 +254,9 @@ bool Game::OnUserUpdate(float fElapsedTime) {
 
       if (level->isComplete()) {
         currentPoints += 10 * currentLevel * difficulty;
+        if (currentLives < 3) {
+          ++currentLives;
+        }
         if (currentLevel < Constants::NUMBER_OF_LEVELS) {
           // Go to next level
           gameState = GAME_STATE_NEXTLEVEL;
@@ -323,6 +335,22 @@ bool Game::OnUserUpdate(float fElapsedTime) {
 
       break;
     }
+    case GAME_STATE_HIT: {
+      float hitScale = 0.1f;
+      olc::vi2d hitSize = (olc::vf2d)(erasFont->GetTextSizeProp(Constants::HIT)) * hitScale;
+      olc::vi2d hitPos = ScreenSize() / 2 - hitSize / 2;
+      erasFont->DrawStringPropDecal(hitPos, Constants::HIT, olc::RED, {hitScale, hitScale});
+
+      if (timeAccumulator > Constants::HIT_DURATION || GetMouse(0).bPressed || GetKey(olc::SPACE).bPressed) {
+        gameState = GAME_STATE_PLAY;
+        timeAccumulator = 0;
+        generateLevel();
+        currentSound = sndInGame;
+        olc::SOUND::PlaySample(currentSound, true);
+      }
+
+      break;
+    }
     case GAME_STATE_GAMEOVER: {
       float loseScale = 0.25f;
       olc::vi2d loseSize = (olc::vf2d)(erasFont->GetTextSizeProp(Constants::LOSE)) * loseScale;
@@ -334,7 +362,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
         gameState = GAME_STATE_MENU;
         timeAccumulator = 0;
         currentSound = sndIntro;
-        olc::SOUND::PlaySample(sndIntro, true);
+        olc::SOUND::PlaySample(currentSound, true);
       }
 
       break;
@@ -545,6 +573,7 @@ void Game::newGame() {
   currentPoints = 0;
   coinEaten = 0;
   timeAccumulator = 0;
+  currentLives = 3;
   currentLevel = 1;
   generateLevel();
   currentSound = sndInGame;
