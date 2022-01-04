@@ -18,12 +18,6 @@ public:
   bool OnUserCreate() override;
   bool OnUserUpdate(float fElapsedTime) override;
   bool OnUserDestroy() override;
-  bool getSound();
-
-  void newGame();
-  void nextLevel();
-  void generateLevel();
-  void load();
 
 private:
   enum {
@@ -63,6 +57,13 @@ private:
   static int sndIntro;
   static int sndInGame;
   static olc::Font* erasFont;
+
+  void newGame();
+  void nextLevel();
+  void generateLevel();
+  void playSound(int snd);
+  void readHighScore();
+  void writeHighScore();
 };
 
 #endif

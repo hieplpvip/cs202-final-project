@@ -57,7 +57,7 @@ TrafficLight::TrafficLight() {
   scale = 0.2f;
   timeAccumulator = 0;
   currentColor = GREEN;
-  pos = {(float)pge->ScreenWidth()*0.6f, 2.0f};
+  pos = {(float)pge->ScreenWidth() * 0.75f, 2.0f};
 }
 
 void TrafficLight::reset() {

@@ -30,7 +30,7 @@ public:
 
   Obstacle* generateObstacle();
 
-  bool checkCollision(Player* player , bool sound);
+  bool checkCollision(Player* player, bool soundEnabled);
   void checkCoin(Player* player, int& coinEaten);
 
 private:

@@ -60,6 +60,8 @@ bool Game::OnUserCreate() {
   currentPoints = 0;
   coinEaten = 0;
 
+  readHighScore();
+
   player = new Player();
   trafficLight = new TrafficLight();
   level = nullptr;
@@ -87,8 +89,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       if (timeAccumulator > Constants::LOADING_DURATION) {
         gameState = GAME_STATE_TITLE;
         timeAccumulator = 0;
-        currentSound = sndIntro;
-        olc::SOUND::PlaySample(currentSound, true);
+        playSound(sndIntro);
       }
 
       break;
@@ -108,7 +109,6 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       break;
     }
     case GAME_STATE_MENU: {
-      currentSound = sndIntro;
       if (GetKey(olc::ENTER).bPressed) {
         if (selectedMenuItem == 0) {
           // New Game
@@ -118,14 +118,12 @@ bool Game::OnUserUpdate(float fElapsedTime) {
             olc::SOUND::StopSample(currentSound);
             currentSound = -1;
           }
-        } 
-        else if (selectedMenuItem == 1) {
-            // Load Game
-            selectedLoadItem = 3;
-            gameState = GAME_STATE_LOADGAME;
-            timeAccumulator = 0;
-        }
-        else if (selectedMenuItem == 2) {
+        } else if (selectedMenuItem == 1) {
+          // Load Game
+          selectedLoadItem = 0;
+          gameState = GAME_STATE_LOADGAME;
+          timeAccumulator = 0;
+        } else if (selectedMenuItem == 2) {
           // Settings
           selectedSettingItem = 2;
           gameState = GAME_STATE_SETTINGS;
@@ -230,15 +228,12 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       trafficLight->draw();
       player->draw();
 
-      std::ifstream f("Score/HighScore.dat", std::ios::out | std::ios::binary);
-      int currentHigh;
-      f.read((char*)&currentHigh, sizeof(currentHigh));
-      f.close();
-      
+      writeHighScore();
+
       DrawString(10, 5, "Level: " + std::to_string(currentLevel), olc::WHITE);
       DrawString(10, 15, "Lives: " + std::to_string(currentLives), olc::WHITE);
       DrawString(10, 25, "Score: " + std::to_string(currentPoints + coinEaten * 10), olc::WHITE);
-      DrawString(10, 35, "High score: " + std::to_string(currentPoints + std::max(coinEaten * 10, currentHigh)), olc::WHITE);
+      DrawString(10, 35, "High Score: " + std::to_string(highScore), olc::WHITE);
 
       if (level->checkCollision(soundEnabled)) {
         Logging::info("Hit obstacle! ");
@@ -251,12 +246,9 @@ bool Game::OnUserUpdate(float fElapsedTime) {
           --currentLives;
         }
         timeAccumulator = 0;
-        if (soundEnabled)
-        {
-            if (currentSound != -1) {
-                olc::SOUND::StopSample(currentSound);
-                currentSound = -1;
-            }
+        if (currentSound != -1) {
+          olc::SOUND::StopSample(currentSound);
+          currentSound = -1;
         }
         return true;
       }
@@ -273,12 +265,11 @@ bool Game::OnUserUpdate(float fElapsedTime) {
           // Go to next level
           gameState = GAME_STATE_NEXTLEVEL;
           timeAccumulator = 0;
-          if (soundEnabled)
-          {
-              if (currentSound != -1) {
-                  olc::SOUND::StopSample(currentSound);
-                  currentSound = -1;
-              }
+          if (soundEnabled) {
+            if (currentSound != -1) {
+              olc::SOUND::StopSample(currentSound);
+              currentSound = -1;
+            }
           }
         } else {
           // Win game
@@ -302,7 +293,10 @@ bool Game::OnUserUpdate(float fElapsedTime) {
           gameState = GAME_STATE_SAVEGAME;
         } else {
           // Back to menu
+          selectedMenuItem = 0;
           gameState = GAME_STATE_MENU;
+          timeAccumulator = 0;
+          playSound(sndIntro);
         }
       } else if (GetKey(olc::DOWN).bPressed) {
         ++selectedPauseItem;
@@ -346,6 +340,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
         selectedMenuItem = 0;
         gameState = GAME_STATE_MENU;
         timeAccumulator = 0;
+        playSound(sndIntro);
       }
 
       break;
@@ -360,11 +355,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
         gameState = GAME_STATE_PLAY;
         timeAccumulator = 0;
         generateLevel();
-        currentSound = sndInGame;
-        if (soundEnabled)
-        {
-            olc::SOUND::PlaySample(currentSound, true);
-        }
+        playSound(sndInGame);
       }
 
       break;
@@ -375,26 +366,11 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       olc::vi2d losePos = ScreenSize() / 2 - loseSize / 2;
       erasFont->DrawStringPropDecal(losePos, Constants::LOSE, olc::RED, {loseScale, loseScale});
 
-      int score = 0;
-      std::ifstream f("Score/HighScore.dat", std::ios::out | std::ios::binary);
-      f.read((char*)&score, sizeof(score));
-      if (score < coinEaten * 10)
-          score = coinEaten * 10;
-
-      f.close();
-
-      std::ofstream c("Score/HighScore.dat", std::ios::binary);
-      c.write((char*)&score, sizeof(score));
-      c.close();
-
       if (timeAccumulator > Constants::LOSE_DURATION || GetMouse(0).bPressed || GetKey(olc::SPACE).bPressed) {
         selectedMenuItem = 0;
         gameState = GAME_STATE_MENU;
         timeAccumulator = 0;
-        currentSound = sndIntro;
-        if (soundEnabled) {
-            olc::SOUND::PlaySample(currentSound, true);
-        }
+        playSound(sndIntro);
       }
 
       break;
@@ -467,10 +443,11 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       if (GetKey(olc::ENTER).bPressed) {
         if (selectedLoadItem == (int)ITEMS.size() - 1) {
           gameState = GAME_STATE_MENU;
+          timeAccumulator = 0;
         } else {
           std::string filename = "SaveGame/save_" + std::to_string(selectedLoadItem + 1) + ".dat";
           if (fileExists(filename)) {
-            std::ifstream f(filename, std::ios::out | std::ios::binary);
+            std::ifstream f(filename, std::ios::binary);
             f.read((char*)&difficulty, sizeof(difficulty));
             f.read((char*)&currentLevel, sizeof(currentLevel));
             f.read((char*)&currentPoints, sizeof(currentPoints));
@@ -508,11 +485,6 @@ bool Game::OnUserUpdate(float fElapsedTime) {
         erasFont->DrawStringPropDecal(textPos, ITEMS[i], textColor, {textScale, textScale});
       }
 
-      if (timeAccumulator > 100) {
-        gameState = GAME_STATE_MENU;
-        timeAccumulator = 0;
-      }
-
       break;
     }
     case GAME_STATE_SETTINGS: {
@@ -535,7 +507,8 @@ bool Game::OnUserUpdate(float fElapsedTime) {
             }
           }
         } else {
-          timeAccumulator = 101;
+          gameState = GAME_STATE_MENU;
+          timeAccumulator = 0;
         }
       } else if (GetKey(olc::DOWN).bPressed) {
         ++selectedSettingItem;
@@ -566,11 +539,6 @@ bool Game::OnUserUpdate(float fElapsedTime) {
         olc::vi2d textSize = (olc::vf2d)(erasFont->GetTextSizeProp(text)) * textScale;
         olc::vi2d textPos = center - textSize / 2;
         erasFont->DrawStringPropDecal(textPos, text, textColor, {textScale, textScale});
-      }
-
-      if (timeAccumulator > 100) {
-        gameState = GAME_STATE_MENU;
-        timeAccumulator = 0;
       }
 
       break;
@@ -609,11 +577,7 @@ void Game::newGame() {
   currentLives = 3;
   currentLevel = 1;
   generateLevel();
-  currentSound = sndInGame;
-  if (soundEnabled)
-  {
-      olc::SOUND::PlaySample(currentSound, true);
-  }
+  playSound(sndInGame);
 }
 
 void Game::nextLevel() {
@@ -623,11 +587,7 @@ void Game::nextLevel() {
   timeAccumulator = 0;
   ++currentLevel;
   generateLevel();
-  currentSound = sndInGame;
-  if (soundEnabled)
-  {
-      olc::SOUND::PlaySample(currentSound, true);
-  }
+  playSound(sndInGame);
 }
 
 void Game::generateLevel() {
@@ -643,4 +603,35 @@ void Game::generateLevel() {
   }
   level = new Level(timeBetweenObstacles, obstacleSpeed, numberOfLanes, player, std::chrono::steady_clock::now().time_since_epoch().count());
   trafficLight->reset();
+}
+
+void Game::playSound(int snd) {
+  if (currentSound != -1) {
+    olc::SOUND::StopSample(currentSound);
+    currentSound = -1;
+  }
+  currentSound = snd;
+  if (soundEnabled) {
+    olc::SOUND::PlaySample(currentSound, true);
+  }
+}
+
+void Game::readHighScore() {
+  if (fileExists("Score/HighScore.dat")) {
+    std::ifstream f("Score/HighScore.dat", std::ios::binary);
+    f.read((char*)&highScore, sizeof(highScore));
+    f.close();
+  } else {
+    highScore = 0;
+  }
+}
+
+void Game::writeHighScore() {
+  int currentScore = currentPoints + coinEaten * 10;
+  if (currentScore > highScore) {
+    highScore = currentScore;
+    std::ofstream f("Score/HighScore.dat", std::ios::binary);
+    f.write((char*)&highScore, sizeof(highScore));
+    f.close();
+  }
 }

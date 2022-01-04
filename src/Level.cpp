@@ -30,7 +30,7 @@ Level::Level(float timeBetweenObstacles, float obstacleSpeed, int numberOfLanes,
   }
 
   // Set initial position of the player
-  player->setPosition({pge->ScreenWidth() / 2.0f, (float)bottomLanePos});
+  player->setPosition({pge->ScreenWidth() / 2.0f, (float)bottomLanePos + 10});
 }
 
 Level::~Level() {
@@ -63,9 +63,9 @@ void Level::draw() {
   }
 }
 
-bool Level::checkCollision(bool sound) {
+bool Level::checkCollision(bool soundEnabled) {
   for (auto& lane : lanes) {
-    if (lane->checkCollision(player , sound)) {
+    if (lane->checkCollision(player, soundEnabled)) {
       return true;
     }
   }
@@ -79,5 +79,5 @@ void Level::checkCoin(int& coinEaten) {
 }
 
 bool Level::isComplete() {
-  return (int)(player->getPosition().y + player->getSize().y) < topLanePos;
+  return (int)(player->getPosition().y + player->getSize().y + 10) < topLanePos;
 }
