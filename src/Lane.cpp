@@ -3,7 +3,7 @@
 olc::Sprite* Lane::spr = nullptr;
 
 bool Lane::loadData() {
-  spr = new olc::Sprite("assets/graphics/Lane 3.png");
+  spr = new olc::Sprite("assets/graphics/Lane.png");
   return spr != nullptr;
 }
 
