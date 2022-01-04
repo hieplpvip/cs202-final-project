@@ -53,6 +53,7 @@ private:
   int currentLevel;
   int currentPoints;
   int coinEaten;
+  int highScore;
 
   Player* player;
   TrafficLight* trafficLight;
