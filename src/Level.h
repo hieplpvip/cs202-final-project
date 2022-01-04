@@ -21,7 +21,7 @@ public:
   void update(float fElapsedTime);
   void draw();
 
-  bool checkCollision();
+  bool checkCollision(bool sound);
   void checkCoin(int& coinEaten);
 
   bool isComplete();

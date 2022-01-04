@@ -18,6 +18,7 @@ public:
   bool OnUserCreate() override;
   bool OnUserUpdate(float fElapsedTime) override;
   bool OnUserDestroy() override;
+  bool getSound();
 
   void newGame();
   void nextLevel();
