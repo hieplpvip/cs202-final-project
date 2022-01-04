@@ -63,9 +63,9 @@ void Level::draw() {
   }
 }
 
-bool Level::checkCollision() {
+bool Level::checkCollision(bool sound) {
   for (auto& lane : lanes) {
-    if (lane->checkCollision(player)) {
+    if (lane->checkCollision(player , sound)) {
       return true;
     }
   }

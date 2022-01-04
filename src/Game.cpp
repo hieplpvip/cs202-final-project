@@ -240,7 +240,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       DrawString(10, 25, "Score: " + std::to_string(currentPoints + coinEaten * 10), olc::WHITE);
       DrawString(10, 35, "High score: " + std::to_string(currentPoints + std::max(coinEaten * 10, currentHigh)), olc::WHITE);
 
-      if (level->checkCollision()) {
+      if (level->checkCollision(soundEnabled)) {
         Logging::info("Hit obstacle! ");
         if (currentLives == 1) {
           Logging::info("Game lost!\n");

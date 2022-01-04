@@ -115,10 +115,11 @@ Obstacle* Lane::generateObstacle() {
   }
 }
 
-bool Lane::checkCollision(Player* player) {
+bool Lane::checkCollision(Player* player , bool sound) {
   for (auto& obstacle : obstacles) {
     if (obstacle->intersectWithEntity(player)) {
-      obstacle->playCollisionSound();
+      if(sound)
+         obstacle->playCollisionSound();
       return true;
     }
   }
