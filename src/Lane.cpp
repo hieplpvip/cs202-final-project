@@ -29,8 +29,7 @@ Lane::Lane(olc::vf2d pos, int direction, float timeBetweenObstacles, float obsta
   obstacle->setSpeed(obstacleSpeed);
   obstacles.push_back(obstacle);
 
-  // Initialize the 
-
+  // Initialize the coin
   coin = new Coin();
   coin->setPosition({(float)rnd.next(pge->ScreenWidth() * 0.2f, pge->ScreenWidth() * 0.8f), pos.y + (20 - coin->getSize().y) / 2.0f});
 }
@@ -85,9 +84,7 @@ void Lane::update(float fElapsedTime) {
 
 void Lane::drawBackground() {
   // Draw the road
-  //pge->SetPixelMode(olc::Pixel::MASK);
   pge->DrawSprite(pos, spr);
-  pge->SetPixelMode(olc::Pixel::NORMAL);
 }
 
 void Lane::drawObjects() {
@@ -115,11 +112,12 @@ Obstacle* Lane::generateObstacle() {
   }
 }
 
-bool Lane::checkCollision(Player* player , bool sound) {
+bool Lane::checkCollision(Player* player, bool soundEnabled) {
   for (auto& obstacle : obstacles) {
     if (obstacle->intersectWithEntity(player)) {
-      if(sound)
-         obstacle->playCollisionSound();
+      if (soundEnabled) {
+        obstacle->playCollisionSound();
+      }
       return true;
     }
   }
