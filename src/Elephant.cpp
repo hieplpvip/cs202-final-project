@@ -40,3 +40,7 @@ void Elephant::draw() {
 void Elephant::playCollisionSound() {
   olc::SOUND::PlaySample(sndCollision);
 }
+
+TYPE Elephant::getType() {
+  return ANIMAL;
+}

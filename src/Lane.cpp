@@ -49,12 +49,14 @@ void Lane::setSeed(long long seed) {
   rnd.setSeed(seed);
 }
 
-void Lane::update(float fElapsedTime) {
+void Lane::update(float fElapsedTime, bool redLight) {
   timeAccumulator += fElapsedTime;
 
   // Move obstacles
   for (auto& obstacle : obstacles) {
-    obstacle->move(fElapsedTime);
+    if (!redLight || obstacle->getType() == ANIMAL) {
+      obstacle->move(fElapsedTime);
+    }
   }
 
   // Remove obstacles that have moved out of window
@@ -73,7 +75,7 @@ void Lane::update(float fElapsedTime) {
     timeAccumulator = 0;
     if (rnd.next(3) == 0) {
       Logging::debug("[Lane::update] Generating new obstacle\n");
-      Obstacle* obstacle = generateObstacle();
+      Obstacle* obstacle = generateObstacle(redLight);
       obstacle->setDirection(direction == 0 ? LEFT : RIGHT);
       obstacle->setPosition({direction == 0 ? pge->ScreenWidth() : -obstacle->getSize().x, pos.y + (20 - obstacle->getSize().y) / 2.0f});
       obstacle->setSpeed(obstacleSpeed);
@@ -95,18 +97,25 @@ void Lane::drawObjects() {
 
   // Draw the obstacles
   for (auto& obstacle : obstacles) {
-    obstacle->draw();
+    if (obstacle->getType() == VEHICLE) {
+      obstacle->draw();
+    }
+  }
+  for (auto& obstacle : obstacles) {
+    if (obstacle->getType() == ANIMAL) {
+      obstacle->draw();
+    }
   }
 }
 
-Obstacle* Lane::generateObstacle() {
-  int type = rnd.next(4);
+Obstacle* Lane::generateObstacle(bool animalOnly) {
+  int type = rnd.next(animalOnly ? 2 : 4);
   if (type == 0) {
     return new Bird();
   } else if (type == 1) {
-    return new Car();
-  } else if (type == 2) {
     return new Elephant();
+  } else if (type == 2) {
+    return new Car();
   } else {
     return new Truck();
   }

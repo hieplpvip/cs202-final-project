@@ -24,11 +24,11 @@ public:
   static void unloadData();
 
   void setSeed(long long seed);
-  void update(float fElapsedTime);
+  void update(float fElapsedTime, bool redLight);
   void drawBackground();
   void drawObjects();
 
-  Obstacle* generateObstacle();
+  Obstacle* generateObstacle(bool animalOnly = false);
 
   bool checkCollision(Player* player, bool soundEnabled);
   void checkCoin(Player* player, int& coinEaten);
