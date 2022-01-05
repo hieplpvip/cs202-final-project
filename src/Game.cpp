@@ -126,7 +126,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
           timeAccumulator = 0;
         } else if (selectedMenuItem == 2) {
           // Settings
-          selectedSettingItem = 2;
+          selectedSettingItem = (int)Constants::SETTING_ITEMS.size() - 1;
           gameState = GAME_STATE_SETTINGS;
           timeAccumulator = 0;
         } else {
@@ -298,13 +298,15 @@ bool Game::OnUserUpdate(float fElapsedTime) {
           gameState = GAME_STATE_SAVEGAME;
         } else if (selectedPauseItem == 2) {
           // Settings
-          selectedSettingItem = 2;
+          selectedSettingItem = (int)Constants::SETTING_ITEMS.size() - 1;
           gameState = GAME_STATE_SETTINGS;
           timeAccumulator = 0;
         } else {
           // Back To Menu
           selectedMenuItem = 0;
           gameState = GAME_STATE_MENU;
+          currentPoints = 0;
+          coinEaten = 0;
           isPlaying = false;
           timeAccumulator = 0;
           playSound(sndIntro);
@@ -380,6 +382,8 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       if (timeAccumulator > Constants::LOSE_DURATION || GetMouse(0).bPressed || GetKey(olc::SPACE).bPressed) {
         selectedMenuItem = 0;
         gameState = GAME_STATE_MENU;
+        currentPoints = 0;
+        coinEaten = 0;
         isPlaying = false;
         timeAccumulator = 0;
         playSound(sndIntro);
@@ -519,7 +523,13 @@ bool Game::OnUserUpdate(float fElapsedTime) {
           // Toggle Sound
           soundEnabled = 1 - soundEnabled;
           playSound(isPlaying ? sndInGame : sndIntro);
+        } else if (selectedSettingItem == 2) {
+          // Reset High Score
+          resetHighScore();
+          gameState = isPlaying ? GAME_STATE_PAUSE : GAME_STATE_MENU;
+          timeAccumulator = 0;
         } else {
+          // Back
           gameState = isPlaying ? GAME_STATE_PAUSE : GAME_STATE_MENU;
           timeAccumulator = 0;
         }
@@ -649,4 +659,9 @@ void Game::writeHighScore() {
     f.write((char*)&highScore, sizeof(highScore));
     f.close();
   }
+}
+
+void Game::resetHighScore() {
+  highScore = 0;
+  writeHighScore();
 }

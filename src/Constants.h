@@ -23,7 +23,7 @@ namespace Constants {
   const int NUMBER_OF_SAVE_SLOTS = 5;
 
   std::vector<std::string> MENU_ITEMS = {"New Game", "Load Game", "Settings", "Exit"};
-  std::vector<std::string> SETTING_ITEMS = {"Difficulty: ", "Sound: ", "Back"};
+  std::vector<std::string> SETTING_ITEMS = {"Difficulty: ", "Sound: ", "Reset High Score", "Back"};
   std::vector<std::string> PAUSE_ITEMS = {"Continue ", "Save Game", "Settings", "Back To Menu"};
 
   const int NUMBER_OF_LEVELS = 10;
