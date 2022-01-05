@@ -220,9 +220,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       }
 
       trafficLight->update(fElapsedTime);
-      if (trafficLight->getColor() != RED) {
-        level->update(fElapsedTime);
-      }
+      level->update(fElapsedTime, trafficLight->getColor() == RED);
 
       level->draw();
       trafficLight->draw();

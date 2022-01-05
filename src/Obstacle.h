@@ -13,11 +13,17 @@ enum DIRECTION {
   RIGHT,
 };
 
+enum TYPE {
+  ANIMAL,
+  VEHICLE,
+};
+
 class Obstacle : public Entity {
 public:
   void setDirection(DIRECTION direction);
   void move(float fElapsedTime);
   virtual void playCollisionSound() = 0;
+  virtual TYPE getType() = 0;
 
 protected:
   DIRECTION direction;

@@ -44,9 +44,9 @@ void Level::setSeed(long long seed) {
   rnd.setSeed(seed);
 }
 
-void Level::update(float fElapsedTime) {
+void Level::update(float fElapsedTime, bool redLight) {
   for (auto& lane : lanes) {
-    lane->update(fElapsedTime);
+    lane->update(fElapsedTime, redLight);
   }
 }
 

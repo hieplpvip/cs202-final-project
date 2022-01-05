@@ -12,6 +12,7 @@ public:
 
   void draw();
   void playCollisionSound();
+  TYPE getType();
 
 private:
   static olc::Sprite *sprLeft, *sprRight;

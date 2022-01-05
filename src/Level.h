@@ -18,7 +18,7 @@ public:
   static void unloadData();
 
   void setSeed(long long seed);
-  void update(float fElapsedTime);
+  void update(float fElapsedTime, bool redLight);
   void draw();
 
   bool checkCollision(bool soundEnabled);
