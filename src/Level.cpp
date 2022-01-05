@@ -22,7 +22,8 @@ Level::Level(float timeBetweenObstacles, float obstacleSpeed, int numberOfLanes,
   this->setSeed(seed);
 
   // Initialize the lanes
-  topLanePos = (pge->ScreenHeight() - 20 * numberOfLanes) / 2;
+  topLanePos = (pge->ScreenHeight() - 20 * numberOfLanes) / 2+10;
+  //topLanePos = (pge->ScreenHeight() - 20 * numberOfLanes) / 2;
   bottomLanePos = topLanePos + 20 * numberOfLanes;
   for (int i = 0; i < numberOfLanes; i++) {
     Lane* lane = new Lane({0, (float)(topLanePos + i * 20)}, rnd.next(2), timeBetweenObstacles, obstacleSpeed, rnd.next(1000000000));
