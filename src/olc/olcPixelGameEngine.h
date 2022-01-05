@@ -330,7 +330,7 @@ int main()
 }
 
 */
-#pragma endregion
+#pragma endregion;
 
 #ifndef OLC_PGE_DEF
 #define OLC_PGE_DEF

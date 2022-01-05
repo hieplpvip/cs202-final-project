@@ -5,6 +5,7 @@
 #include "olcPixelGameEngine.h"
 #include "olcPGEX_Sound.h"
 #include "olcPGEX_Font.h"
+#include "olcPGEX_CustomFont.h"
 // clang-format on
 
 #include "Level.h"
@@ -57,6 +58,7 @@ private:
   static int sndIntro;
   static int sndInGame;
   static olc::Font* erasFont;
+  //static olc::Font* vhelveb;
 
   void newGame();
   void nextLevel();

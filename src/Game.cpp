@@ -6,12 +6,14 @@
 #include "Constants.h"
 #include "Logging.h"
 #include "Utility.h"
+#include "olcPixelGameEngine.h"
 
 olc::PixelGameEngine* pge = nullptr;
 
 int Game::sndIntro = -1;
 int Game::sndInGame = -1;
 olc::Font* Game::erasFont = nullptr;
+//olc::Font* Game::vhelveb = nullptr;
 
 #define delete_ptr(ptr) \
   if (ptr != nullptr) { \
@@ -32,6 +34,7 @@ bool Game::OnUserCreate() {
   sndIntro = olc::SOUND::LoadAudioSample("assets/sound/NFL Theme Song (HQ).wav");
   sndInGame = olc::SOUND::LoadAudioSample("assets/sound/MC Hammer - U Can't Touch This.wav");
   erasFont = new olc::Font("assets/fonts/eras.png");
+  // vhelveb = new olc::Font("assets/fonts/VHELVEBD.png");
 
   if (sndIntro == -1 || sndInGame == -1 ||
       !Bird::loadData() ||
@@ -230,10 +233,47 @@ bool Game::OnUserUpdate(float fElapsedTime) {
 
       writeHighScore();
 
-      DrawString(10, 5, "Level: " + std::to_string(currentLevel), olc::WHITE);
-      DrawString(10, 15, "Lives: " + std::to_string(currentLives), olc::WHITE);
-      DrawString(10, 25, "Score: " + std::to_string(currentPoints + coinEaten * 10), olc::WHITE);
-      DrawString(10, 35, "High Score: " + std::to_string(highScore), olc::WHITE);
+
+      olc::Pixel blackShadow(0, 0, 0);
+
+      // float scaleText = 0.1f;
+      /*std::string slevel = "LEVEL: " + std::to_string(currentLevel);
+      olc::vi2d size = (olc::vf2d)(vhelveb->GetTextSizeProp(slevel)) * scaleText;
+      olc::vi2d posLS = { 9, 5 };
+      vhelveb->DrawStringPropDecal(posLS, slevel, blackShadow, {scaleText, scaleText});
+
+      olc::vi2d posL = { 8, 4 };
+      vhelveb->DrawStringPropDecal(posL, slevel, olc::WHITE, { scaleText, scaleText});
+
+      std::string slives = "Lives: " + std::to_string(currentLives);
+      olc::vi2d posLivesS = { 9, 15 };
+      vhelveb->DrawStringPropDecal(posLivesS, slives, blackShadow, { scaleText, scaleText });
+      
+      olc::vi2d posLives = { 8, 14 };
+      vhelveb->DrawStringPropDecal(posLives, slives, olc::WHITE, { scaleText, scaleText });
+
+      std::string sscore = "Score: " + std::to_string(currentPoints + coinEaten * 10);
+      olc::vi2d posScoreS = { 9, 25};
+      vhelveb->DrawStringPropDecal(posScoreS, sscore, blackShadow, { scaleText, scaleText });
+      
+      olc::vi2d posScore = { 8, 24 };
+      vhelveb->DrawStringPropDecal(posScore, sscore, olc::WHITE, { scaleText, scaleText });
+
+      std::string sHigh = "High Score: " + std::to_string(highScore);
+      olc::vi2d posHighS = { 9, 35 };
+      vhelveb->DrawStringPropDecal(posHighS, sHigh, blackShadow, { scaleText, scaleText });
+      olc::vi2d posHigh = { 8, 34 };
+      vhelveb->DrawStringPropDecal(posHigh, sHigh, olc::WHITE, { scaleText, scaleText });*/
+
+      DrawString(9, 6, "LEVEL: " + std::to_string(currentLevel), blackShadow);
+      DrawString(9, 16, "Lives: " + std::to_string(currentLives), blackShadow);
+      DrawString(9, 26, "Score: " + std::to_string(currentPoints + coinEaten * 10), blackShadow);
+      DrawString(9, 36, "High Score: " + std::to_string(highScore), blackShadow);
+
+      DrawString(8, 5, "LEVEL: " + std::to_string(currentLevel), olc::WHITE);
+      DrawString(8, 15, "Lives: " + std::to_string(currentLives), olc::WHITE);
+      DrawString(8, 25, "Score: " + std::to_string(currentPoints + coinEaten * 10), olc::WHITE);
+      DrawString(8, 35, "High Score: " + std::to_string(highScore), olc::WHITE);
 
       if (level->checkCollision(soundEnabled)) {
         Logging::info("Hit obstacle! ");
