@@ -15,6 +15,7 @@ public:
   void moveLeft(float fElapsedTime);
   void moveRight(float fElapsedTime);
 
+  void reset();
   void draw();
 
 private:

@@ -61,6 +61,10 @@ void Player::moveRight(float fElapsedTime) {
   }
 }
 
+void Player::reset() {
+  prevSprite = {4, 0};
+}
+
 void Player::draw() {
   int dx = 0, dy = 0;
   if (pge->GetKey(olc::LEFT).bHeld) --dx;
