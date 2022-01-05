@@ -49,6 +49,7 @@ private:
   int currentPoints;
   int coinEaten;
   int highScore;
+  bool isPlaying;
 
   Player* player;
   TrafficLight* trafficLight;

@@ -59,6 +59,7 @@ bool Game::OnUserCreate() {
   currentLevel = 1;
   currentPoints = 0;
   coinEaten = 0;
+  isPlaying = false;
 
   readHighScore();
 
@@ -295,10 +296,16 @@ bool Game::OnUserUpdate(float fElapsedTime) {
           // Save Game
           selectedLoadItem = 0;
           gameState = GAME_STATE_SAVEGAME;
+        } else if (selectedPauseItem == 2) {
+          // Settings
+          selectedSettingItem = 2;
+          gameState = GAME_STATE_SETTINGS;
+          timeAccumulator = 0;
         } else {
-          // Back to menu
+          // Back To Menu
           selectedMenuItem = 0;
           gameState = GAME_STATE_MENU;
+          isPlaying = false;
           timeAccumulator = 0;
           playSound(sndIntro);
         }
@@ -373,6 +380,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       if (timeAccumulator > Constants::LOSE_DURATION || GetMouse(0).bPressed || GetKey(olc::SPACE).bPressed) {
         selectedMenuItem = 0;
         gameState = GAME_STATE_MENU;
+        isPlaying = false;
         timeAccumulator = 0;
         playSound(sndIntro);
       }
@@ -389,7 +397,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
           ITEMS.push_back("Slot " + std::to_string(i) + " (empty)");
         }
       }
-      ITEMS.push_back("Back To Menu");
+      ITEMS.push_back("Back");
 
       if (GetKey(olc::ENTER).bPressed) {
         if (selectedLoadItem == (int)ITEMS.size() - 1) {
@@ -444,7 +452,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
           ITEMS.push_back("Slot " + std::to_string(i) + " (empty)");
         }
       }
-      ITEMS.push_back("Back To Menu");
+      ITEMS.push_back("Back");
 
       if (GetKey(olc::ENTER).bPressed) {
         if (selectedLoadItem == (int)ITEMS.size() - 1) {
@@ -465,6 +473,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
 
             gameState = GAME_STATE_PLAY;
             player->setPosition({X, Y});
+            isPlaying = true;
             generateLevel();
             playSound(sndInGame);
           }
@@ -503,19 +512,15 @@ bool Game::OnUserUpdate(float fElapsedTime) {
           if (difficulty == 4) {
             difficulty = 1;
           }
+          if (isPlaying) {
+            generateLevel();
+          }
         } else if (selectedSettingItem == 1) {
           // Toggle Sound
           soundEnabled = 1 - soundEnabled;
-          currentSound = sndIntro;
-          if (currentSound != -1) {
-            if (soundEnabled) {
-              olc::SOUND::PlaySample(currentSound, true);
-            } else {
-              olc::SOUND::StopSample(currentSound);
-            }
-          }
+          playSound(isPlaying ? sndInGame : sndIntro);
         } else {
-          gameState = GAME_STATE_MENU;
+          gameState = isPlaying ? GAME_STATE_PAUSE : GAME_STATE_MENU;
           timeAccumulator = 0;
         }
       } else if (GetKey(olc::DOWN).bPressed) {
@@ -584,6 +589,7 @@ void Game::newGame() {
   timeAccumulator = 0;
   currentLives = 3;
   currentLevel = 1;
+  isPlaying = true;
   generateLevel();
   playSound(sndInGame);
 }
