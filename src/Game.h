@@ -65,6 +65,7 @@ private:
   void playSound(int snd);
   void readHighScore();
   void writeHighScore();
+  void resetHighScore();
 };
 
 #endif
