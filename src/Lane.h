@@ -15,9 +15,14 @@
 
 extern olc::PixelGameEngine* pge;
 
+enum TYPE {
+  ANIMAL,
+  VEHICLE,
+};
+
 class Lane {
 public:
-  Lane(olc::vf2d pos, int direction, float timeBetweenObstacles, float obstacleSpeed, long long seed);
+  Lane(olc::vf2d pos, int direction, TYPE type, float timeBetweenObstacles, float obstacleSpeed, long long seed);
   ~Lane();
 
   static bool loadData();
@@ -28,7 +33,7 @@ public:
   void drawBackground();
   void drawObjects();
 
-  Obstacle* generateObstacle(bool animalOnly = false);
+  Obstacle* generateObstacle();
 
   bool checkCollision(Player* player, bool soundEnabled);
   void checkCoin(Player* player, int& coinEaten);
@@ -36,6 +41,7 @@ public:
 private:
   olc::vf2d pos;
   int direction;
+  TYPE type;
   float timeBetweenObstacles;
   float obstacleSpeed;
   float timeAccumulator;

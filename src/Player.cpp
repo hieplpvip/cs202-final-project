@@ -89,7 +89,7 @@ void Player::draw() {
     }
   } else {
     if (dx == -1) {
-      prevSprite = {2, 2};
+      prevSprite = {1, 2};
     } else if (dx == +1) {
       prevSprite = {7, 2};
     }

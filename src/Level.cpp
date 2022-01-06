@@ -25,7 +25,7 @@ Level::Level(float timeBetweenObstacles, float obstacleSpeed, int numberOfLanes,
   topLanePos = (pge->ScreenHeight() - 20 * numberOfLanes) / 2 + 10;
   bottomLanePos = topLanePos + 20 * numberOfLanes;
   for (int i = 0; i < numberOfLanes; i++) {
-    Lane* lane = new Lane({0, (float)(topLanePos + i * 20)}, rnd.next(2), timeBetweenObstacles, obstacleSpeed, rnd.next(1000000000));
+    Lane* lane = new Lane({0, (float)(topLanePos + i * 20)}, rnd.next(2), (i & 1) ? VEHICLE : ANIMAL, timeBetweenObstacles, obstacleSpeed, rnd.next(1000000000));
     lanes.push_back(lane);
   }
 

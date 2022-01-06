@@ -14,9 +14,10 @@ void Lane::unloadData() {
   }
 }
 
-Lane::Lane(olc::vf2d pos, int direction, float timeBetweenObstacles, float obstacleSpeed, long long seed) {
+Lane::Lane(olc::vf2d pos, int direction, TYPE type, float timeBetweenObstacles, float obstacleSpeed, long long seed) {
   this->pos = pos;
   this->direction = direction;
+  this->type = type;
   this->timeBetweenObstacles = timeBetweenObstacles;
   this->obstacleSpeed = obstacleSpeed;
   this->setSeed(seed);
@@ -54,7 +55,7 @@ void Lane::update(float fElapsedTime, bool redLight) {
 
   // Move obstacles
   for (auto& obstacle : obstacles) {
-    if (!redLight || obstacle->getType() == ANIMAL) {
+    if (!redLight || type == ANIMAL) {
       obstacle->move(fElapsedTime);
     }
   }
@@ -70,12 +71,12 @@ void Lane::update(float fElapsedTime, bool redLight) {
     }
   }
 
-  if (timeAccumulator >= timeBetweenObstacles) {
+  if ((!redLight || type == ANIMAL) && timeAccumulator >= timeBetweenObstacles) {
     // Generate new obstacles with probability 1/3
     timeAccumulator = 0;
     if (rnd.next(3) == 0) {
       Logging::debug("[Lane::update] Generating new obstacle\n");
-      Obstacle* obstacle = generateObstacle(redLight);
+      Obstacle* obstacle = generateObstacle();
       obstacle->setDirection(direction == 0 ? LEFT : RIGHT);
       obstacle->setPosition({direction == 0 ? pge->ScreenWidth() : -obstacle->getSize().x, pos.y + (20 - obstacle->getSize().y) / 2.0f});
       obstacle->setSpeed(obstacleSpeed);
@@ -97,27 +98,24 @@ void Lane::drawObjects() {
 
   // Draw the obstacles
   for (auto& obstacle : obstacles) {
-    if (obstacle->getType() == VEHICLE) {
-      obstacle->draw();
-    }
-  }
-  for (auto& obstacle : obstacles) {
-    if (obstacle->getType() == ANIMAL) {
-      obstacle->draw();
-    }
+    obstacle->draw();
   }
 }
 
-Obstacle* Lane::generateObstacle(bool animalOnly) {
-  int type = rnd.next(animalOnly ? 2 : 4);
-  if (type == 0) {
-    return new Bird();
-  } else if (type == 1) {
-    return new Elephant();
-  } else if (type == 2) {
-    return new Car();
+Obstacle* Lane::generateObstacle() {
+  int ob_type = rnd.next(2);
+  if (type == ANIMAL) {
+    if (ob_type == 0) {
+      return new Bird();
+    } else {
+      return new Elephant();
+    }
   } else {
-    return new Truck();
+    if (ob_type == 0) {
+      return new Car();
+    } else {
+      return new Truck();
+    }
   }
 }
 
