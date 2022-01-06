@@ -235,10 +235,14 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       DrawString(9, 26, "Score: " + std::to_string(currentPoints + coinEaten * 10), blackShadow);
       DrawString(9, 36, "High Score: " + std::to_string(highScore), blackShadow);
 
-      DrawString(8, 5, "LEVEL: " + std::to_string(currentLevel), olc::WHITE);
-      DrawString(8, 15, "Lives: " + std::to_string(currentLives), olc::WHITE);
-      DrawString(8, 25, "Score: " + std::to_string(currentPoints + coinEaten * 10), olc::WHITE);
-      DrawString(8, 35, "High Score: " + std::to_string(highScore), olc::WHITE);
+      DrawString(8, 5, "LEVEL: ", olc::GREEN);
+      DrawString(64, 5, std::to_string(currentLevel), olc::WHITE);
+      DrawString(8, 15, "Lives: ", olc::RED);
+      DrawString(64, 15, std::to_string(currentLives), olc::WHITE);
+      DrawString(8, 25, "Score: ", olc::YELLOW);
+      DrawString(64, 25, std::to_string(currentPoints + coinEaten * 10), olc::WHITE);
+      DrawString(8, 35, "High Score: ", olc::CYAN);
+      DrawString(104, 35, std::to_string(highScore), olc::WHITE);
 
       if (level->checkCollision(soundEnabled)) {
         Logging::info("Hit obstacle! ");
