@@ -21,7 +21,7 @@ Lane::Lane(olc::vf2d pos, int direction, TYPE type, float timeBetweenObstacles, 
   this->timeBetweenObstacles = timeBetweenObstacles;
   this->obstacleSpeed = obstacleSpeed;
   this->setSeed(seed);
-  this->timeAccumulator = 0;
+  this->timeAccumulator = -rnd.next(2.0f);
 
   // Initialize the first obstacle
   Obstacle* obstacle = generateObstacle();
@@ -80,7 +80,20 @@ void Lane::update(float fElapsedTime, bool redLight) {
       obstacle->setDirection(direction == 0 ? LEFT : RIGHT);
       obstacle->setPosition({direction == 0 ? pge->ScreenWidth() : -obstacle->getSize().x, pos.y + (20 - obstacle->getSize().y) / 2.0f});
       obstacle->setSpeed(obstacleSpeed);
-      obstacles.push_back(obstacle);
+
+      bool overlap = false;
+      for (auto& o : obstacles) {
+        if (o->intersectWithEntity(obstacle)) {
+          overlap = true;
+          break;
+        }
+      }
+
+      if (!overlap) {
+        obstacles.push_back(obstacle);
+      } else {
+        delete obstacle;
+      }
     }
   }
 }
