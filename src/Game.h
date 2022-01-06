@@ -64,7 +64,7 @@ private:
   void generateLevel();
   void playSound(int snd);
   void readHighScore();
-  void writeHighScore();
+  void writeHighScore(bool forceWrite = false);
   void resetHighScore();
 };
 

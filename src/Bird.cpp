@@ -40,7 +40,3 @@ void Bird::draw() {
 void Bird::playCollisionSound() {
   olc::SOUND::PlaySample(sndCollision);
 }
-
-TYPE Bird::getType() {
-  return ANIMAL;
-}

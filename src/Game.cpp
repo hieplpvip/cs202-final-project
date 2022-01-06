@@ -651,9 +651,9 @@ void Game::readHighScore() {
   }
 }
 
-void Game::writeHighScore() {
+void Game::writeHighScore(bool forceWrite) {
   int currentScore = currentPoints + coinEaten * 10;
-  if (currentScore > highScore) {
+  if (forceWrite || currentScore > highScore) {
     highScore = currentScore;
     std::ofstream f("Score/HighScore.dat", std::ios::binary);
     f.write((char*)&highScore, sizeof(highScore));
@@ -663,5 +663,5 @@ void Game::writeHighScore() {
 
 void Game::resetHighScore() {
   highScore = 0;
-  writeHighScore();
+  writeHighScore(true);
 }

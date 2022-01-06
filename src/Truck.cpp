@@ -40,7 +40,3 @@ void Truck::draw() {
 void Truck::playCollisionSound() {
   olc::SOUND::PlaySample(sndCollision);
 };
-
-TYPE Truck::getType() {
-  return VEHICLE;
-}
