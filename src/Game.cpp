@@ -58,8 +58,8 @@ bool Game::OnUserCreate() {
   currentLives = 3;
   currentLevel = 1;
   currentPoints = 0;
+  pendingCoin = 0;
   coinEaten = 0;
-  startScore = 0;
   isPlaying = false;
 
   readHighScore();
@@ -180,7 +180,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
         std::string s = "You passed Level " + std::to_string(currentLevel) + "!";
         olc::vi2d size = (olc::vf2d)(erasFont->GetTextSizeProp(s)) * scale;
         olc::vi2d pos = ScreenSize() / 2 - size / 2;
-        pos.y += size.y  - 30;
+        pos.y += size.y - 30;
         erasFont->DrawStringPropDecal(pos, s, olc::RED, {scale, scale});
       }
       {
@@ -229,22 +229,20 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       trafficLight->draw();
       player->draw();
 
-      
-
       olc::Pixel blackShadow(0, 0, 0);
       DrawString(9, 6, "LEVEL: " + std::to_string(currentLevel), blackShadow);
       DrawString(9, 16, "Lives: " + std::to_string(currentLives), blackShadow);
-      DrawString(9, 26, "Score: " + std::to_string(currentPoints + coinEaten * 10), blackShadow);
+      DrawString(9, 26, "Score: " + std::to_string(currentPoints + (coinEaten + pendingCoin) * 10), blackShadow);
       DrawString(9, 36, "High Score: " + std::to_string(highScore), blackShadow);
 
       DrawString(8, 5, "LEVEL: " + std::to_string(currentLevel), olc::WHITE);
       DrawString(8, 15, "Lives: " + std::to_string(currentLives), olc::WHITE);
-      DrawString(8, 25, "Score: " + std::to_string(currentPoints + coinEaten * 10), olc::WHITE);
+      DrawString(8, 25, "Score: " + std::to_string(currentPoints + (coinEaten + pendingCoin) * 10), olc::WHITE);
       DrawString(8, 35, "High Score: " + std::to_string(highScore), olc::WHITE);
 
       if (level->checkCollision(soundEnabled)) {
-        coinEaten = startScore;
         Logging::info("Hit obstacle! ");
+        pendingCoin = 0;
         if (currentLives == 1) {
           Logging::info("Game lost!\n");
           gameState = GAME_STATE_GAMEOVER;
@@ -262,11 +260,12 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       }
 
       // Check if player earns any coins
-      level->checkCoin(coinEaten);
+      level->checkCoin(pendingCoin);
 
       if (level->isComplete()) {
         currentPoints += 10 * currentLevel * difficulty;
-        startScore = coinEaten;
+        coinEaten += pendingCoin;
+        pendingCoin = 0;
         writeHighScore();
         if (currentLives < 3) {
           ++currentLives;
@@ -311,8 +310,8 @@ bool Game::OnUserUpdate(float fElapsedTime) {
           selectedMenuItem = 0;
           gameState = GAME_STATE_MENU;
           currentPoints = 0;
+          pendingCoin = 0;
           coinEaten = 0;
-          startScore = 0;
           isPlaying = false;
           timeAccumulator = 0;
           playSound(sndIntro);
@@ -390,7 +389,6 @@ bool Game::OnUserUpdate(float fElapsedTime) {
         gameState = GAME_STATE_MENU;
         currentPoints = 0;
         coinEaten = 0;
-        startScore = 0;
         isPlaying = false;
         timeAccumulator = 0;
         playSound(sndIntro);
@@ -419,11 +417,8 @@ bool Game::OnUserUpdate(float fElapsedTime) {
           f.write((char*)&difficulty, sizeof(difficulty));
           f.write((char*)&currentLevel, sizeof(currentLevel));
           f.write((char*)&currentPoints, sizeof(currentPoints));
-          f.write((char*)&startScore, sizeof(startScore));
+          f.write((char*)&coinEaten, sizeof(coinEaten));
           f.write((char*)&currentLives, sizeof(currentLives));
-          auto [X, Y] = player->getPosition();
-          f.write((char*)&X, sizeof(X));
-          f.write((char*)&Y, sizeof(Y));
           f.close();
 
           gameState = GAME_STATE_PAUSE;
@@ -477,16 +472,12 @@ bool Game::OnUserUpdate(float fElapsedTime) {
             f.read((char*)&difficulty, sizeof(difficulty));
             f.read((char*)&currentLevel, sizeof(currentLevel));
             f.read((char*)&currentPoints, sizeof(currentPoints));
-            f.read((char*)&startScore, sizeof(startScore));
-            coinEaten = startScore;
+            f.read((char*)&coinEaten, sizeof(coinEaten));
             f.read((char*)&currentLives, sizeof(currentLives));
-            float X, Y;
-            f.read((char*)&X, sizeof(X));
-            f.read((char*)&Y, sizeof(Y));
             f.close();
 
+            pendingCoin = 0;
             gameState = GAME_STATE_PLAY;
-            player->setPosition({X, Y});
             isPlaying = true;
             generateLevel();
             playSound(sndInGame);
@@ -605,8 +596,8 @@ void Game::newGame() {
   Logging::info("New Game!\n");
   gameState = GAME_STATE_PLAY;
   currentPoints = 0;
+  pendingCoin = 0;
   coinEaten = 0;
-  startScore = 0;
   timeAccumulator = 0;
   currentLives = 3;
   currentLevel = 1;

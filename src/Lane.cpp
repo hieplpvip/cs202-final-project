@@ -21,7 +21,7 @@ Lane::Lane(olc::vf2d pos, int direction, TYPE type, float timeBetweenObstacles, 
   this->timeBetweenObstacles = timeBetweenObstacles;
   this->obstacleSpeed = obstacleSpeed;
   this->setSeed(seed);
-  this->timeAccumulator = -rnd.next(2.0f);
+  this->timeAccumulator = -(float)rnd.next(2.0f);
 
   // Initialize the first obstacle
   Obstacle* obstacle = generateObstacle();

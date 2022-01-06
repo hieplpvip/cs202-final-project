@@ -47,9 +47,9 @@ private:
   int currentLives;
   int currentLevel;
   int currentPoints;
+  int pendingCoin;
   int coinEaten;
   int highScore;
-  int startScore;
   bool isPlaying;
 
   Player* player;
