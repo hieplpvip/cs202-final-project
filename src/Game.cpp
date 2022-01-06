@@ -180,6 +180,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
         std::string s = "You passed Level " + std::to_string(currentLevel) + "!";
         olc::vi2d size = (olc::vf2d)(erasFont->GetTextSizeProp(s)) * scale;
         olc::vi2d pos = ScreenSize() / 2 - size / 2;
+        pos.y += size.y  - 30;
         erasFont->DrawStringPropDecal(pos, s, olc::RED, {scale, scale});
       }
       {
@@ -187,7 +188,7 @@ bool Game::OnUserUpdate(float fElapsedTime) {
         std::string s = "Prepare for Level " + std::to_string(currentLevel + 1) + "...";
         olc::vi2d size = (olc::vf2d)(erasFont->GetTextSizeProp(s)) * scale;
         olc::vi2d pos = ScreenSize() / 2 - size / 2;
-        pos.y += size.y + 5;
+        pos.y += size.y - 10;
         erasFont->DrawStringPropDecal(pos, s, olc::RED, {scale, scale});
       }
 
