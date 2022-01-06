@@ -18,7 +18,7 @@ namespace Constants {
   const float HIT_DURATION = 3.0f;
 
   const char* LOSE = "You lose!";
-  const float LOSE_DURATION = 3.0f;
+  const float LOSE_DURATION = 3.5f;
 
   const int NUMBER_OF_SAVE_SLOTS = 5;
 
