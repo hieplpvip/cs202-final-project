@@ -357,6 +357,9 @@ bool Game::OnUserUpdate(float fElapsedTime) {
       if (timeAccumulator > Constants::WIN_DURATION || GetMouse(0).bPressed || GetKey(olc::SPACE).bPressed) {
         selectedMenuItem = 0;
         gameState = GAME_STATE_MENU;
+        currentPoints = 0;
+        coinEaten = 0;
+        isPlaying = false;
         timeAccumulator = 0;
         playSound(sndIntro);
       }
